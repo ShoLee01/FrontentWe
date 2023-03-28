@@ -1,0 +1,21 @@
+.toolbar-container {
+    width: 100%;
+    background-color: #4B7EFF;
+}
+.toolbar-container span {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+}
+.navbar{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-content: center;
+}
+
+.container-button button {
+    background-color: #494B5F;
+}
+.button-color{
+    margin-left: 1em;
+}

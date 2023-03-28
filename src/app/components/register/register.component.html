@@ -1,0 +1,75 @@
+<div class="container-body">
+    <div class="container-l">
+      <div class="container-form" mat-card-content>
+        <h1 mat-dialog-title class="text p-0 ps-2" style="text-align: start; margin-top: 2%;"><span>Información de la cuenta</span></h1>
+        <h2 mat-dialog-title class="text p-0 ps-2" style="text-align: start; margin-top: 2%;"><span>Ingrese los detalles de su correo y contraseña</span></h2>
+
+        <form [formGroup]="RegisterForm" class="container-input">
+            <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4">
+                        <div class="form-group">
+                            <mat-form-field appearance="outline" class="input">
+                                <mat-label>Email</mat-label>
+                                <input formControlName="email" matInput placeholder="john.doe@email.com">
+                                <mat-error>
+                                  El email es <strong>requerido</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                
+                    <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4">
+                        <div class="form-group">
+                            <mat-form-field appearance="outline" class="input">
+                                <mat-label>Contraseña</mat-label>
+                                <input formControlName="password" matInput placeholder="*********" [type]="passwordType">
+                                <mat-error>
+                                  La contraseña es <strong>requerida</strong>
+                                </mat-error>
+                                <button matSuffix type="button" mat-icon-button (click)="togglePassword()">
+                                  <mat-icon>{{passwordShown ? 'visibility' : 'visibility_off'}}</mat-icon>
+                                </button>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4">
+                        <div class="form-group">
+                            <mat-form-field appearance="outline" class="input">
+                                <mat-label>Confirmar contraseña</mat-label>
+                                <input formControlName="passwordConfirm" matInput placeholder="*********" [type]="passwordTypeConfirm">
+                                <mat-error>
+                                     La confirmación de contraseña es <strong>requerida</strong>
+                                </mat-error>
+                                <button matSuffix type="button" mat-icon-button (click)="togglePasswordConfirm()">
+                                  <mat-icon>{{passwordShownConfirm ? 'visibility' : 'visibility_off'}}</mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <p class="error-message" *ngIf="RegisterForm.hasError('passwordMismatch')">Las contraseñas no <strong>coinciden</strong></p>
+                                
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4">
+                        <div class="form-group">
+                            <div class="botton-form p-0">
+                                <button mat-raised-button class="button-color" (click)="signIn()">Registrarse</button>
+                              </div>
+                        </div>
+                      </div>
+
+
+                </div>
+        </form>
+        
+      </div>
+    </div>
+  
+    <div class="container-r">
+      <div class="container-form-img" mat-card-content>
+        <img src="../../../assets/images/register.svg" alt="login" style="width: 80%; height: 50%;">
+      </div>
+    </div>
+  </div>
+  

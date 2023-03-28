@@ -1,0 +1,37 @@
+<div class="container-body">
+  <div class="container-l">
+    <div class="container-form" mat-card-content>
+      <h1 mat-dialog-title class="text" style="text-align: center; margin-top: 2%;"><span>¡Te damos la bienvenida!</span></h1>
+      <form [formGroup]="loginForm" class="container-input">
+        <mat-form-field appearance="outline" class="input">
+          <mat-label>Email</mat-label>
+          <input formControlName="email" matInput placeholder="Email*">
+          <mat-error>
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="input">
+          <mat-label>Password</mat-label>
+          <input formControlName="password" matInput placeholder="Password" [type]="passwordType">
+          <mat-error>
+            Password is <strong>required</strong>
+          </mat-error>
+          <button matSuffix type="button" mat-icon-button (click)="togglePassword()">
+            <mat-icon>{{passwordShown ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </button>
+        </mat-form-field>
+  
+      </form>
+    </div>
+    <div class="botton-form">
+      <button mat-raised-button class="button-color" (click)="signIn()">inicia sesión</button>
+    </div>
+  </div>
+
+  <div class="container-r">
+    <div class="container-form" mat-card-content>
+      <img src="../../../assets/images/logo.png" alt="login" style="width: 50%; height: 50%;">
+    </div>
+  </div>
+</div>
