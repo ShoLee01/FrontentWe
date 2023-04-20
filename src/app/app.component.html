@@ -1,29 +1,43 @@
 <mat-toolbar class="toolbar toolbar-container">
   <span>WeStudy University</span>
   <span class="example-spacer"></span>
+
   <div class="navbar">
     <div class="container-button">
-      <button *ngIf="!isLogged" mat-raised-button class="button-color" (click)="nextPage('/login')">Iniciar sesión</button>
-      <button *ngIf="!isLogged" mat-raised-button class="button-color" (click)="nextPage('/register')">Regístrate</button>
-      <button *ngIf="isLogged" mat-raised-button color="primary">
+
+      <button *ngIf="isSmallScreen" mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button *ngIf="!isLogged&&!isSmallScreen" mat-raised-button class="button-color" (click)="nextPage('/login')">Iniciar sesión</button>
+      <button *ngIf="!isLogged&&!isSmallScreen" mat-raised-button class="button-color" (click)="nextPage('/register')">Regístrate</button>
+      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button color="primary">
         <mat-icon>account_circle</mat-icon> Profile 
       </button>
-      <button *ngIf="isLogged" mat-raised-button color="primary">
+      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button color="primary">
         <mat-icon>favorite</mat-icon> Favorites
       </button>
-      <button *ngIf="isLogged" mat-raised-button color="primary" (click)="logout()">
+      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button color="primary" (click)="logout()">
         <mat-icon>logout</mat-icon> Logout
       </button>
+      
     </div>
-
-  <!--   <div *ngIf="isLogged" class="info-login">
-      <div class="info-login-item">
-        <img class="info-login-photo" src="{{this.user.url_photo}}" alt="Foto">
-      </div>
-      <span>{{user.first_name}} {{user.last_name}}</span>
-    </div> -->
-
   </div>
 
 </mat-toolbar>
-<router-outlet></router-outlet>
+
+<mat-menu #menu="matMenu" class="custom-menu">
+  <button *ngIf="!isLogged" mat-menu-item class="button-color" (click)="nextPage('/login')">Iniciar sesión</button>
+  <button *ngIf="!isLogged" mat-menu-item class="button-color" (click)="nextPage('/register')">Regístrate</button>
+  <button *ngIf="isLogged" mat-menu-item color="primary">
+    <mat-icon>account_circle</mat-icon> Profile
+  </button>
+  <button *ngIf="isLogged" mat-menu-item color="primary">
+    <mat-icon>favorite</mat-icon> Favorites
+  </button>
+  <button *ngIf="isLogged" mat-menu-item color="primary" (click)="logout()">
+    <mat-icon>logout</mat-icon> Logout
+  </button>
+</mat-menu>
+<div class="router-class">
+  <router-outlet></router-outlet>
+</div>

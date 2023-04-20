@@ -42,7 +42,8 @@ export class LoginComponent implements OnInit {
   }
 
   signIn() {
-    let token: {};
+    this.router.navigate(['/principal']);
+/*     let token: {};
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
       let data = {
@@ -70,6 +71,6 @@ export class LoginComponent implements OnInit {
         });
     } else {
       alert('Please fill in all the fields');
-    }
+    } */
   }
 }

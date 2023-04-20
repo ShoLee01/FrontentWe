@@ -13,6 +13,21 @@
     align-content: center;
 }
 
+.toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 64px;
+}
+
+.router-class {
+    padding-top: 64px;
+    width: 100%;
+    height: 100%;
+}
+
 .container-button button {
     background-color: #494B5F;
 }

@@ -1,75 +1,299 @@
 <div class="container-body">
-    <div class="container-l">
-      <div class="container-form" mat-card-content>
-        <h1 mat-dialog-title class="text p-0 ps-2" style="text-align: start; margin-top: 2%;"><span>Información de la cuenta</span></h1>
-        <h2 mat-dialog-title class="text p-0 ps-2" style="text-align: start; margin-top: 2%;"><span>Ingrese los detalles de su correo y contraseña</span></h2>
+  <div class="container-l d-flex flex-column align-content-center justify-content-center">
+
+    <!-- Primer paso del registro -->
+
+    <div *ngIf="!isRegister && !isConfirm" class="container-form content-flex-column" mat-card-content>
+      <div style="width: 100%;">
+
+        <h1 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><span>Información de la
+            cuenta</span></h1>
+        <h2 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><span>Ingrese los detalles de
+            su
+            correo y contraseña</span></h2>
+      </div>
+      <form [formGroup]="RegisterProcessForm" class="container-input">
+        <div class="row">
+
+          <div class="col-xs-12 col-sm-12 col-md-12 custom-padding">
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>Email</mat-label>
+                <input formControlName="email" matInput placeholder="john.doe@email.com">
+                <mat-error>
+                  El email es <strong>requerido</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>Contraseña</mat-label>
+                <input formControlName="password" matInput placeholder="*********" [type]="passwordType">
+                <mat-error>
+                  La contraseña es <strong>requerida</strong>
+                </mat-error>
+                <button matSuffix type="button" mat-icon-button (click)="togglePassword()">
+                  <mat-icon>{{passwordShown ? 'visibility' : 'visibility_off'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+            <div class="form-group">
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>Confirmar contraseña</mat-label>
+                <input formControlName="passwordConfirm" matInput placeholder="*********" [type]="passwordTypeConfirm">
+                <mat-error>
+                  La confirmación de contraseña es <strong>requerida</strong>
+                </mat-error>
+                <button matSuffix type="button" mat-icon-button (click)="togglePasswordConfirm()">
+                  <mat-icon>{{passwordShownConfirm ? 'visibility' : 'visibility_off'}}</mat-icon>
+                </button>
+              </mat-form-field>
+              <p class="error-message" *ngIf="RegisterForm.hasError('passwordMismatch')">Las contraseñas no
+                <strong>coinciden</strong>
+              </p>
+            </div>
+          </div>
+          <!-- Acepta los términos y condiciones -->
+          <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4 custom-padding">
+            <div class="form-group">
+              <mat-checkbox formControlName="verified_tc">Acepta los términos y condiciones</mat-checkbox>
+            </div>
+          </div>
+          <!-- Acepta las politicas de privacidad -->
+          <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4 mb-3 custom-padding">
+            <div class="form-group">
+              <mat-checkbox formControlName="verified_pp">Acepta las politicas de privacidad</mat-checkbox>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding file-input-container">
+            <div class="form-group">
+              <div class="botton-form p-0">
+                <button mat-raised-button class="button-color" (click)="signUpProcess()">Registrarse</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+            <div class="form-group">
+              <div class="botton-form p-0">
+                <button mat-raised-button class="button-color-primary" (click)="Active()">Activar cuenta</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+
+    </div>
+    <!-- Segundo paso del registro -->
+    <div *ngIf="isRegister && !isConfirm" class="container-form" mat-card-content>
+      <div class="scroll-container">
+        <h1 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><span>Complete el
+            registro</span>
+        </h1>
+        <h2 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><span>Ingrese todos los campos
+            obligatorios*</span></h2>
 
         <form [formGroup]="RegisterForm" class="container-input">
-            <div class="row">
+          <div class="row">
 
-                    <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4">
-                        <div class="form-group">
-                            <mat-form-field appearance="outline" class="input">
-                                <mat-label>Email</mat-label>
-                                <input formControlName="email" matInput placeholder="john.doe@email.com">
-                                <mat-error>
-                                  El email es <strong>requerido</strong>
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                
-                    <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4">
-                        <div class="form-group">
-                            <mat-form-field appearance="outline" class="input">
-                                <mat-label>Contraseña</mat-label>
-                                <input formControlName="password" matInput placeholder="*********" [type]="passwordType">
-                                <mat-error>
-                                  La contraseña es <strong>requerida</strong>
-                                </mat-error>
-                                <button matSuffix type="button" mat-icon-button (click)="togglePassword()">
-                                  <mat-icon>{{passwordShown ? 'visibility' : 'visibility_off'}}</mat-icon>
-                                </button>
-                            </mat-form-field>
-                        </div>
-                    </div>
+            <!-- Nombre de la universidad -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group">
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Nombre</mat-label>
+                  <input formControlName="name" matInput placeholder="Universidad ABC">
+                  <mat-error>
+                    El nombre es <strong>requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
 
-                    <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4">
-                        <div class="form-group">
-                            <mat-form-field appearance="outline" class="input">
-                                <mat-label>Confirmar contraseña</mat-label>
-                                <input formControlName="passwordConfirm" matInput placeholder="*********" [type]="passwordTypeConfirm">
-                                <mat-error>
-                                     La confirmación de contraseña es <strong>requerida</strong>
-                                </mat-error>
-                                <button matSuffix type="button" mat-icon-button (click)="togglePasswordConfirm()">
-                                  <mat-icon>{{passwordShownConfirm ? 'visibility' : 'visibility_off'}}</mat-icon>
-                                </button>
-                            </mat-form-field>
-                            <p class="error-message" *ngIf="RegisterForm.hasError('passwordMismatch')">Las contraseñas no <strong>coinciden</strong></p>
-                                
-                        </div>
-                    </div>
+            <!-- Clasificación a nivel mundial -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group">
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Clasificación a nivel mundial</mat-label>
+                  <input formControlName="global_ranking" matInput placeholder="1000" type="number">
+                </mat-form-field>
+              </div>
+            </div>
 
-                    <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4">
-                        <div class="form-group">
-                            <div class="botton-form p-0">
-                                <button mat-raised-button class="button-color" (click)="signIn()">Registrarse</button>
-                              </div>
-                        </div>
-                      </div>
+            <!-- Clasificación a nivel mundial -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group">
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Clasificación a nivel nacional</mat-label>
+                  <input formControlName="national_level_ranking" matInput placeholder="1000" type="number">
+                  <mat-error>
+                    La clasificación a nivel nacional es <strong>requerida</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
 
+            <!-- Clasificación a nivel mundial -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group">
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Clasificación a nivel Latinoamericano</mat-label>
+                  <input formControlName="latin_american_ranking" matInput placeholder="1000" type="number">
+                  <mat-error>
+                    La clasificación a nivel latinoamericano es <strong>requerida</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Nombre del Pais -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group">
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>País</mat-label>
+                  <input formControlName="country" matInput placeholder="Universidad ABC">
+                  <mat-error>
+                    El país es <strong>requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Nombre de la cuidad -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group">
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Cuidad</mat-label>
+                  <input formControlName="city" matInput placeholder="Universidad ABC">
+                  <mat-error>
+                    La cuidad es <strong>requerida</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Imagen de fondo de la universidad -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group d-flex">
+                <div class="file-input-container">
+                  <button mat-raised-button type="button" (click)="backgroundFileInput.click()">Seleccionar imagen de
+                    fondo</button>
+                  <div class="name-file">
+                    <input hidden formControlName="background_image" #backgroundFileInput type="file"
+                      (change)="onFileChange($event, 'background')">
+                    <span class="name-text" *ngIf="backgroundName">{{ backgroundName }}</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Imagen de fondo de la universidad -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              <div class="form-group d-flex">
+                <div class="file-input-container">
+                  <button mat-raised-button type="button" (click)="logoFileInput.click()">Seleccionar Logo</button>
+                  <div class="name-file">
+                    <input hidden formControlName="logo" #logoFileInput type="file"
+                      (change)="onFileChange($event, 'logo')">
+                    <span class="name-text" *ngIf="logoName">{{ logoName }}</span>
+                  </div>
 
                 </div>
+              </div>
+            </div>
+
+            <!-- Certificada por Sunedu -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding file-input-container">
+              <div class="form-group">
+                <mat-checkbox formControlName="verified">Certificada por Sunedu</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4 custom-padding file-input-container">
+              <div class="form-group">
+                <div class="botton-form d-flex">
+                  <button *ngIf="!isSmallScreen" mat-raised-button class="button-color p-3"
+                    (click)="signUpBack()"><mat-icon>arrow_back</mat-icon> Anterior</button>
+                  <button *ngIf="isSmallScreen" mat-raised-button class="button-color p-3"
+                    (click)="signUpBack()"><mat-icon>arrow_back</mat-icon></button>
+                  <button mat-raised-button class="button-color p-3" style="visibility:hidden;"></button>
+                  <button *ngIf="!isSmallScreen" mat-raised-button class="button-color-primary p-3"
+                    (click)="signUpConfirm()">Finalizar registro <mat-icon>done</mat-icon></button>
+                  <button *ngIf="isSmallScreen" mat-raised-button class="button-color-primary p-3"
+                    (click)="signUpConfirm()"><mat-icon>done</mat-icon></button>
+                </div>
+              </div>
+            </div>
+          </div>
         </form>
-        
       </div>
     </div>
-  
-    <div class="container-r">
-      <div class="container-form-img" mat-card-content>
-        <img src="../../../assets/images/register.svg" alt="login" style="width: 80%; height: 50%;">
+    <!-- Tercer paso del registro -->
+    <div *ngIf="isConfirm" class="container-form content-flex-column" mat-card-content>
+      <div style="width: 100%;">
+
+        <h1 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><b>Activación de cuenta</b>
+        </h1>
+        <h2 *ngIf="!isActive" mat-dialog-title class="text p-0"
+          style="text-align: start; margin-top: 2%; text-align: justify;"><span>Para finalizar con el registro tiene que
+            generar un código
+            de autentificación, el cual se lo proporcionará uno de los administradores de WeStudy.
+          </span></h2>
+
+        <h2 *ngIf="isActive" mat-dialog-title class="text p-0"
+          style="text-align: start; margin-top: 2%; text-align: justify;"><span>Para finalizar con el registro tiene que
+            ingresar el código
+            de autentificación, el cual se lo proporcionará uno de los administradores de WeStudy.
+          </span></h2>
+
       </div>
+
+
+      <form [formGroup]="RegisterConfirmForm" class="container-input">
+        <div class="row">
+          <!-- Codigo de seguridad -->
+          <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4 custom-padding">
+            <div class="form-group d-flex align-content-center justify-content-center" style="width: 100%;">
+
+              <mat-form-field *ngIf="isActive" appearance="outline" class="input"
+                style="width: 100%; margin-left: 6px;">
+                <mat-label>Código</mat-label>
+                <input formControlName="code" matInput placeholder="******">
+                <mat-error>
+                  El codigo de autentificanción es <strong>requerido</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4 custom-padding file-input-container">
+            <div class="form-group">
+              <div class="botton-form d-flex">
+                <button *ngIf="!isSmallScreen" mat-raised-button class="button-color p-3"
+                  (click)="signUpBack()"><mat-icon>arrow_back</mat-icon> Anterior</button>
+                <button *ngIf="isSmallScreen" mat-raised-button class="button-color p-3"
+                  (click)="signUpBack()"><mat-icon>arrow_back</mat-icon></button>
+                <button mat-raised-button class="button-color p-3" style="visibility:hidden;"></button>
+                <button *ngIf="!isSmallScreen" mat-raised-button class="button-color-primary p-3"
+                  (click)="activeCode()">Aceptar <mat-icon>done</mat-icon></button>
+                <button *ngIf="isSmallScreen" mat-raised-button class="button-color-primary p-3"
+                  (click)="activeCode()"><mat-icon>done</mat-icon></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
     </div>
   </div>
-  
+
+  <div class="container-r">
+    <div class="container-form-img" mat-card-content>
+      <img src="../../../assets/images/register.svg" alt="login" style="width: 80%; height: 50%;">
+    </div>
+  </div>
+</div>

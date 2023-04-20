@@ -1,0 +1,43 @@
+<div class="grid-container">
+  <div class="d-flex justify-content-between">
+    <h1 class="font-style">Mis cursos</h1>
+    <button mat-raised-button color="primary" class="add-button button-secondary" (click)="addCard()">
+      <mat-icon>add</mat-icon>
+      <span>Agregar curso</span>
+    </button>
+  </div>
+  <mat-grid-list [cols]="numColumns" rowHeight="400px">
+    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <div class="card-img" [style.background-image]="'url(' + card.background_image + ')'">
+          <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item>Editar</button>
+            <button mat-menu-item>Eliminar</button>
+          </mat-menu>
+          <div class="date">
+            <div><b>{{card.start_of_course | date: 'dd'}}</b></div>
+            <div>{{card.start_of_course | date: 'MMM'}}</div>
+          </div>
+          <div class="discount">
+            <div><p class="text-discount">Hasta un -{{card.discount}}%</p></div>
+            <div><p class="text-price">S/.{{card.price}}</p></div>
+          </div>
+        </div>
+        <mat-card-content class="dashboard-card-content">
+          <h3><p class="text-title">{{card.title}}</p></h3>
+          <div><p class="text-description">{{card.program_type}}</p></div>
+          <div class="info">
+            <div class="info"><mat-icon>account_balance</mat-icon> {{card.institution}}</div>
+            <div class="info"><mat-icon>event_available</mat-icon> Inscripción: {{card.end_of_course | date: 'dd MMM'}}</div>
+            <div class="info"><mat-icon>event</mat-icon> Modalidad: {{card.modalidad}}</div>
+            <div class="info"><mat-icon>schedule</mat-icon> Horario del turno: {{card.turno}}</div>
+            <div class="info"><mat-icon>av_timer</mat-icon> Duración: {{card.duration}} meses | {{card.horario1}}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

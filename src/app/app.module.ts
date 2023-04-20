@@ -9,12 +9,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -24,6 +26,8 @@ import { CoursesComponent } from './components/courses/courses.component';
 import { UniversitiesComponent } from './components/universities/universities.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
@@ -31,13 +35,16 @@ import { RegisterComponent } from './components/register/register.component';
     CoursesComponent,
     UniversitiesComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    DashboardComponent,
   ],
   imports: [
+    MatMenuModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatToolbarModule,
+    MatSnackBarModule,
     MatIconModule,
     MatButtonModule,
     MatCardModule,
@@ -56,7 +63,8 @@ import { RegisterComponent } from './components/register/register.component';
     MatCheckboxModule,
     MatButtonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,8 +3,21 @@
     width: 100%;
      
   }
+  .row {
+    height: 100%;
+  }
+
+  .scroll-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+  
   .container-form {
     width: 90%;
+    height: 100%;
     margin: 0;
   }
 
@@ -15,6 +28,9 @@
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
+    max-height: 100vh;
+    box-sizing: border-box; /* Agregue esta línea */
   }
   .container-l{
     display: flex;
@@ -22,8 +38,7 @@
     align-items: center;
     flex-direction: column;
     background-color: #494B5F;
-    /* border-radius: 20px; */
-    width: 40%;
+    width: 55%;
   }
 
   .container-form-img{
@@ -37,16 +52,10 @@
     align-items: center;
     background-color: #e5f3fb;
     /*  */
-    width: 60%;
+    width: 45%;
   }
 
-
-
   .container-input{
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
     width: 100%;
   }
   .input{
@@ -70,6 +79,28 @@
     font-size: 1.2em;
     background-color: #577df7;
     border-radius: 20px;
+  }
+
+  .button-color-primary{
+    width: 100%;
+    height: 2.9em;
+    font-size: 1.2em;
+    background-color: #ffffff !important;
+    color: #577df7 !important ;
+    border-radius: 20px;
+  }
+
+  .file-input-container{
+    margin-bottom: 1.7em;
+  }
+
+  .name-file{
+    color: #fff;
+    display: flex;
+  }
+
+  .name-text{
+    position: absolute;
   }
   
   .text{
@@ -98,22 +129,28 @@
   }
 
   /* cambiar de tama;o esta en modo telefono */
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
+      * {
+        box-sizing: border-box;
+      }
         .container-body{
-        display: flex;
-        flex-direction: column-reverse;
-        width: 100%;
-        height: 100%;
+          display: flex;
+          flex-direction: column-reverse;
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
          }
         .container-l{
-            height: 70%;
+            height: 100%;
             width: 100%;
-          }
+            overflow-y: auto; /* Cambie aquí a auto */
+            overflow-x: hidden; /* Asegúrese de que el desplazamiento horizontal esté oculto */        
+        }
         .container-r{
-            height: 30%;
-            width: 100%;
-          }
+            display: none;
+        }
         .input{
-            width: 90%;
-          }
+            width: 100%;
+        }
+        
     }
