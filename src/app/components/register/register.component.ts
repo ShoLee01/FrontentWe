@@ -23,6 +23,7 @@ export class RegisterComponent implements OnInit {
   RegisterProcessForm!: FormGroup;
   RegisterConfirmForm!: FormGroup;
   passwordType: string = 'password';
+  countries = ["Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba", "Ecuador", "El Salvador", "Guatemala", "Honduras", "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "Puerto Rico", "República Dominicana", "Uruguay", "Venezuela"]
   passwordShown: boolean = false;
   isRegister: boolean = false;
   passwordTypeConfirm: string = 'password';
@@ -46,7 +47,7 @@ export class RegisterComponent implements OnInit {
   ) {
     // Formulario de registro
     this.RegisterProcessForm = this.formBuilder.group({
-      email: ['', Validators.required, Validators.email],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       passwordConfirm: ['', Validators.required],
       verified_tc: [false],
@@ -56,15 +57,11 @@ export class RegisterComponent implements OnInit {
     // Formulario de proceso de registro
     this.RegisterForm = this.formBuilder.group({
       name: ['', Validators.required],
-      background_image: [''],
-      verified: [false],
-      global_ranking: [''],
-      national_level_ranking: ['', Validators.required],
-      latin_american_ranking: ['', Validators.required],
-      number_of_courses: ['', Validators.required],
+      background_image: [null],
       country: ['', Validators.required],
       city: ['', Validators.required],
-      logo: ['']
+      logo: [null],
+      verified: [false]
     });
 
     this.RegisterConfirmForm = this.formBuilder.group({
@@ -85,21 +82,48 @@ export class RegisterComponent implements OnInit {
     this.isConfirm = false;
   }
 
-
-
   Active() {
     this.isConfirm = true;
     this.isActive = true;
   }
 
   signUpConfirm() {
-    this.isActive = true;
-    this.isConfirm = true;
+    if(this.RegisterForm.valid){
+      let data = {...this.RegisterProcessForm.value, ...this.RegisterForm.value};
+      this.api.createAccount(data).subscribe({
+        next: (result: any) => {
+          this.showSnackBar('Cuenta creada');
+          this.isActive = true;
+          this.isConfirm = true;
+          this.changeDetector.detectChanges();
+        },
+        error: (error: any) => {
+          this.showSnackBar('Error al crear la cuenta');
+        }
+      });
+      
+    }
   }
 
   activeCode() {
-    this.showSnackBar('Cuenta activada');
-    this.router.navigate(['/login']);
+    if(this.RegisterConfirmForm.valid){
+      this.api.activateAccount({activation_code: this.RegisterConfirmForm.value.code}).subscribe({
+        next: (result: any) => {
+          if(result.message === 'University activated'){
+            this.showSnackBar('Cuenta activada');
+            this.router.navigate(['/login']);
+            this.changeDetector.detectChanges();
+          }else if(result.message === 'University is already active'){
+            this.showSnackBar('Universidad ya se encuentra activa');
+          }else{
+            this.showSnackBar('Código incorrecto');
+          }
+        },
+        error: (error: any) => {
+          this.showSnackBar('Código incorrecto');
+        }
+      });
+    }
   }
   
   onFileChange(event: any, type: 'background' | 'logo') {
@@ -140,42 +164,28 @@ export class RegisterComponent implements OnInit {
   }
 
   signUpProcess() {
-    this.isRegister = true;
+    if(this.RegisterProcessForm.valid){
+      if(this.RegisterProcessForm.value.verified_pp && this.RegisterProcessForm.value.verified_tc){
+        this.api.registeredAccount({email: this.RegisterProcessForm.value.email}).subscribe({
+          next: (result: any) => {
+            if(!result.university){
+              this.isRegister = true;
+            this.changeDetector.detectChanges();
+            }else{
+              this.showSnackBar('email en uso');
+            }
+          }
+        });
+      }else{
+        this.showSnackBar('Debe aceptar los términos y condiciones y la política de privacidad');
+      }
+      
+    }
   }
 
   generateCode(){
     this.showSnackBar('Código de activación generado');
   }
 
-  signIn() {
-    let token: {};
-    if (this.RegisterForm.valid) {
-      console.log(this.RegisterForm.value);
-      let data = {
-        email: this.RegisterForm.value.email,
-        password: this.RegisterForm.value.password,
-      };
-      this.api.login(this.RegisterForm.value).subscribe(
-        (res: any) => { 
-          console.log(res);
-          this.api
-        .login(data)
-        .subscribe(
-          (data: any) => {
-            token = {...res, ...data};
-            localStorage.setItem('addUsuario', JSON.stringify(token));
-            this.change.changeHandler$.emit(true);
-            this.RegisterForm.reset();
-            alert('Bienvenido ' + data.firstName + ' ' + data.lastName);
-            this.router.navigate(['']);
-          },
-          (error: any) => {
-            alert('User or password incorrect');
-          }
-        );
-        });
-    } else {
-      alert('Please fill in all the fields');
-    }
-  }
+  
 }

@@ -1,0 +1,153 @@
+<div class="container-body">
+  <div class="container-l d-flex flex-column align-content-center justify-content-start">
+    <div class="profile-container">
+      <div class="cover-container">
+        <img [src]="user?.background_image ? user.background_image : '../../../assets/images/portada.jpg'" alt="Portada" class="cover-image" />
+        <div (click)="backgroundFileInput.click()" class="edit-cover-icon">
+          <mat-icon>edit</mat-icon>
+          <input hidden #backgroundFileInput type="file"
+                      (change)="onFileChange($event, 'background')">
+        </div>
+        <div class="profile-image-container">
+          <img [src]="user?.logo ? user.logo : '../../../assets/images/perfil.png'" alt="Imagen de perfil" class="profile-image" />
+          <div (click)="logoFileInput.click()" class="edit-profile-icon">
+            <mat-icon>edit</mat-icon>
+            <input hidden #logoFileInput type="file"
+                      (change)="onFileChange($event, 'logo')">
+          </div>
+        </div>
+      </div>
+      <div class="info-container">
+
+
+        <form [formGroup]="ProfileForm" class="container-input">
+          <div class="row">
+  
+            <div class="col-xs-12 col-sm-12 col-md-6 custom-padding">
+ 
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" matInput placeholder="john.doe@email.com">
+                  <mat-error>
+                    El email es <strong>requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-6 custom-padding">
+
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Nombre de la institución</mat-label>
+                  <input formControlName="name" matInput placeholder="Institución">
+                  <mat-error>
+                    El nombre es <strong>requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 custom-padding">
+ 
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>País de residencia</mat-label>
+                  <mat-select formControlName="country" placeholder="País del curso">
+                      <mat-option *ngFor="let countryOption of countries"
+                          [value]="countryOption">{{countryOption}}</mat-option>
+                  </mat-select>
+              </mat-form-field>
+        
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-6 custom-padding">
+            
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Ciudad</mat-label>
+                  <input formControlName="city" matInput placeholder="Miguel Alfaro">
+                  <mat-error>
+                    La cuidad es <strong>requerida</strong>
+                  </mat-error>
+                </mat-form-field>
+            
+            </div>
+
+            <!-- Clasificación a nivel mundial -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+             
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Clasificación a nivel mundial</mat-label>
+                  <input formControlName="global_ranking" matInput placeholder="1000" type="number">
+                </mat-form-field>
+           
+            </div>
+
+            <!-- Clasificación a nivel mundial -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Clasificación a nivel nacional</mat-label>
+                  <input formControlName="national_level_ranking" matInput placeholder="1000" type="number">
+                  <mat-error>
+                    La clasificación a nivel nacional es <strong>requerida</strong>
+                  </mat-error>
+                </mat-form-field>
+             
+            </div>
+
+            <!-- Clasificación a nivel mundial -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
+              
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Clasificación a nivel Latinoamericano</mat-label>
+                  <input formControlName="latin_american_ranking" matInput placeholder="1000" type="number">
+                  <mat-error>
+                    La clasificación a nivel latinoamericano es <strong>requerida</strong>
+                  </mat-error>
+                </mat-form-field>
+             
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-6 p-0 ps-4 custom-padding">
+         
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Contraseña</mat-label>
+                  <input [(ngModel)]="password" (ngModelChange)="samePassword()" formControlName="password" matInput placeholder="*********" [type]="passwordType">
+                  <mat-error>
+                    La contraseña es <strong>requerida</strong>
+                  </mat-error>
+                  <button matSuffix type="button" mat-icon-button (click)="togglePassword()">
+                    <mat-icon>{{passwordShown ? 'visibility' : 'visibility_off'}}</mat-icon>
+                  </button>
+                </mat-form-field>
+            
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-6 p-0 ps-4 custom-padding">
+            
+                <mat-form-field appearance="outline" class="input">
+                  <mat-label>Confirmar contraseña</mat-label>
+                  <input [(ngModel)]="passwordConfirm" (ngModelChange)="samePassword()" formControlName="passwordConfirm" matInput placeholder="*********" [type]="passwordTypeConfirm">
+                  <mat-error>
+                    La confirmación de contraseña es <strong>requerida</strong>
+                  </mat-error>
+                  <button matSuffix type="button" mat-icon-button (click)="togglePasswordConfirm()">
+                    <mat-icon>{{passwordShownConfirm ? 'visibility' : 'visibility_off'}}</mat-icon>
+                  </button>
+                </mat-form-field>
+                <p class="error-message" *ngIf="ProfileForm.hasError('passwordMismatch')">Las contraseñas no
+                  <strong>coinciden</strong>
+                </p>
+           
+            </div>
+            <div class="d-flex justify-content-end">
+              <button mat-raised-button style="width: 220px; margin-right: 15px;"  class="button-color-secondary-small" type="submit" (click)="changePassword()"  [disabled]="!passwordSame">Cambiar contraseña</button>
+              <button mat-raised-button style="background-color: #fff  !important; color : #577df7;" class="button-color-secondary-small" type="submit" (click)="save()" [disabled]="ProfileForm.invalid">Actualizar</button>
+            </div>
+
+           </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

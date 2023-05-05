@@ -7,23 +7,23 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InterconnectionService } from 'src/app/service/interconnection.service';
-import { ApiService } from 'src/app/service/api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SharedService } from 'src/app/service/shared.service';
+import { ApiAdminService } from 'src/app/service/api-admin.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  selector: 'app-login-admin',
+  templateUrl: './login-admin.component.html',
+  styleUrls: ['./login-admin.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginAdminComponent implements OnInit {
   loginForm!: FormGroup;
   passwordType: string = 'password';
   passwordShown: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    public api: ApiService,
+    public api: ApiAdminService,
     private router: Router,
     private change: InterconnectionService,
     private sharedService: SharedService,
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.change.changeHandlerLoginUser$.emit(true);
+    this.change.changeHandlerLogin$.emit(true);
   }
 
   togglePassword() {
@@ -61,9 +61,9 @@ export class LoginComponent implements OnInit {
           next: (data) => {
             console.log(data, 'data de login');
             localStorage.setItem('addUsuario', JSON.stringify(data));
-            this.change.changeHandler$.emit(true);
+            this.change.changeHandlerAdmin$.emit(true);
             this.loginForm.reset();
-            this.router.navigate(['principal']);
+            this.router.navigate(['principal-admin']);
             this.showSnackBar('Inicio de sesión exitoso');
           },
           error: (error) => {

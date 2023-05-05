@@ -27,6 +27,15 @@ body {
     border-radius: 20px;
   }
 
+  .button-color-secondary-small{
+    width: 150px;
+    height: 2.9em;
+    font-size: 1.2em;
+    background-color: #577df7 !important;
+    border-radius: 20px;
+    margin-bottom: 15px;
+  }
+
   .button-secondary{
     font-size: 1.2em;
     background-color: #577df7 !important;

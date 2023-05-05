@@ -6,38 +6,49 @@
       <span>Agregar curso</span>
     </button>
   </div>
-  <mat-grid-list [cols]="numColumns" rowHeight="400px">
-    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
-      <mat-card class="dashboard-card">
-        <div class="card-img" [style.background-image]="'url(' + card.background_image + ')'">
-          <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu" xPosition="before">
-            <button mat-menu-item>Editar</button>
-            <button mat-menu-item>Eliminar</button>
-          </mat-menu>
-          <div class="date">
-            <div><b>{{card.start_of_course | date: 'dd'}}</b></div>
-            <div>{{card.start_of_course | date: 'MMM'}}</div>
-          </div>
-          <div class="discount">
-            <div><p class="text-discount">Hasta un -{{card.discount}}%</p></div>
-            <div><p class="text-price">S/.{{card.price}}</p></div>
-          </div>
+
+      <div *ngIf="loading" class="load">
+        <div>
+          <mat-spinner></mat-spinner>
+            <p class="text-spinner">Cargando cursos...</p>
         </div>
-        <mat-card-content class="dashboard-card-content">
-          <h3><p class="text-title">{{card.title}}</p></h3>
-          <div><p class="text-description">{{card.program_type}}</p></div>
-          <div class="info">
-            <div class="info"><mat-icon>account_balance</mat-icon> {{card.institution}}</div>
-            <div class="info"><mat-icon>event_available</mat-icon> Inscripción: {{card.end_of_course | date: 'dd MMM'}}</div>
-            <div class="info"><mat-icon>event</mat-icon> Modalidad: {{card.modalidad}}</div>
-            <div class="info"><mat-icon>schedule</mat-icon> Horario del turno: {{card.turno}}</div>
-            <div class="info"><mat-icon>av_timer</mat-icon> Duración: {{card.duration}} meses | {{card.horario1}}</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+      </div>
+      
+      <mat-grid-list *ngIf="!loading" [cols]="numColumns" rowHeight="450px">
+        <mat-grid-tile *ngFor="let card of cards" [colspan]="1" [rowspan]="1">
+          <mat-card class="dashboard-card">
+            <div class="card-img" [style.background-image]="'url(' + (card.background_image ? card.background_image : 'https://imgs.search.brave.com/rwQr60QoOHukZjZ3sp5p2vSqh-xyD6WA5v1hJmOD6PU/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9jZG4u/d2FsbHBhcGVyc2Fm/YXJpLmNvbS82Mi85/MC9vd2s4UUguanBn') + ')'">
+            <!-- <div class="card-img"> -->
+              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="editCard(card)">Editar</button>
+                <button mat-menu-item (click)="deleteCard(card)">Eliminar</button>
+              </mat-menu>
+              <div class="date">
+                <div><b>{{card.start_of_course | date: 'dd'}}</b></div>
+                <div>{{card.start_of_course | date: 'MMM'}}</div>
+              </div>
+              <div class="discount">
+                <div><p class="text-discount">Hasta un -{{card.discount}}%</p></div>
+                <div><p class="text-price">S/.{{card.price}}</p></div>
+              </div>
+            </div>
+            <mat-card-content class="dashboard-card-content">
+              <h3><p class="text-title">{{card.title}}</p></h3>
+              <div><p class="text-description">{{(card.type_of_program.length > 0) ? card.type_of_program[0].name : 'Curso online' }}</p></div>
+              <div class="info">
+                <div class="info"><mat-icon>account_balance</mat-icon> {{card.institution}}</div>
+                <div class="info"><mat-icon>event_available</mat-icon> Inscripción: {{card.registration_date | date: 'dd MMM'}}</div>
+                <div class="info"><mat-icon>event</mat-icon> Modalidad: {{(card.modality.length > 0) ? card.modality[0].name : 'No definido' }}</div>
+                <div class="info"><mat-icon>schedule</mat-icon> Horario del turno: {{card.turno ? card.turno : 'no definido'}}</div>
+                <div class="info"><mat-icon>av_timer</mat-icon> Duración: {{diffInMonthsOrDays(card.start_of_course,card.end_of_course)}} | {{card.shift ? card.shift : 'no definido'}}</div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+    
+ 
 </div>

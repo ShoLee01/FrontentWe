@@ -13,21 +13,30 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
-import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { ReactiveFormsModule } from "@angular/forms";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from "@angular/material/icon";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatRadioModule } from '@angular/material/radio';
 import { CoursesComponent } from './components/courses/courses.component';
 import { UniversitiesComponent } from './components/universities/universities.component';
 import { LoginComponent } from './components/login/login.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { DialogCourseComponent } from './components/dialog-course/dialog-course.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { DialogComponent } from './components/share/dialog/dialog.component';
+import { LoginAdminComponent } from './components/login-admin/login-admin.component';
+import { PrincipalAdminComponent } from './components/principal-admin/principal-admin.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +46,13 @@ import { LayoutModule } from '@angular/cdk/layout';
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
+    DialogCourseComponent,
+    ProfileComponent,
+    DialogComponent,
+    LoginAdminComponent,
+    PrincipalAdminComponent,
   ],
+  entryComponents: [DialogCourseComponent],
   imports: [
     MatMenuModule,
     BrowserModule,
@@ -62,9 +77,14 @@ import { LayoutModule } from '@angular/cdk/layout';
     ReactiveFormsModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatSliderModule,
     MatTableModule,
     MatPaginatorModule,
-    LayoutModule
+    LayoutModule,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

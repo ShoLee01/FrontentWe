@@ -18,16 +18,28 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
+    "types": ["node"],
     "useDefineForClassFields": false,
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "paths": {
+      "crypto": [
+        "node_modules/crypto-browserify",
+        "node_modules/crypto"
+      ],
+      "stream": [
+        "node_modules/stream-browserify",
+        "node_modules/stream"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "enableIvy": true
   }
 }

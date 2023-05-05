@@ -1,0 +1,104 @@
+.shift-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+  
+  .shift-inputs {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .shift-inputs input {
+    width: 45%;
+  }
+  
+  .shift-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .shift-tag {
+    background-color: #3f51b5; /* Color de fondo del tag */
+    color: #fff; /* Color del texto del tag */
+    border-radius: 16px;
+    padding: 4px 8px;
+    font-size: 14px;
+  }
+  
+  .shift-tag button {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+  
+  .shift-tag button:hover {
+    text-decoration: underline;
+  }
+
+  .file-input-container{
+    margin-bottom: 1.7em;
+  }
+
+  .custom-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mat-slider {
+    width: 300px;
+  }
+
+  .text-sub-title{
+    color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .mat-mdc-slider.mat-primary {
+    --mdc-slider-handle-color: #4B7EFF;
+    --mdc-slider-focus-handle-color: #4B7EFF;
+    --mdc-slider-hover-handle-color: #4B7EFF;
+    --mdc-slider-active-track-color: #4B7EFF;
+    --mdc-slider-inactive-track-color: #4B7EFF;
+    --mdc-slider-with-tick-marks-active-container-color: #fff;
+    --mdc-slider-with-tick-marks-inactive-container-color: #4B7EFF;
+    --mat-mdc-slider-ripple-color: #4B7EFF;
+    --mat-mdc-slider-hover-ripple-color: rgba(194, 24, 91, 0.05);
+    --mat-mdc-slider-focus-ripple-color: rgba(194, 24, 91, 0.2);
+}
+
+.mat-mdc-radio-button.mat-accent {
+  --mdc-radio-disabled-selected-icon-color: #fff;
+  --mdc-radio-disabled-unselected-icon-color: #fff;
+  --mdc-radio-unselected-focus-icon-color: #eeeeee;
+  --mdc-radio-unselected-hover-icon-color: #eeeeee;
+  --mdc-radio-unselected-icon-color: rgba(255, 255, 255, 0.54);
+  --mdc-radio-unselected-pressed-icon-color: rgba(255, 255, 255, 0.54);
+  --mdc-radio-selected-focus-icon-color: #4B7EFF;
+  --mdc-radio-selected-hover-icon-color: #4B7EFF;
+  --mdc-radio-selected-icon-color: #4B7EFF;
+  --mdc-radio-selected-pressed-icon-color: #4B7EFF;
+  --mat-mdc-radio-ripple-color: #fff;
+  --mat-mdc-radio-checked-ripple-color: #4B7EFF;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-color: #4B7EFF;
+  --mdc-protected-button-label-text-color: #fff;
+}
+
+.mat-mdc-raised-button.mat-warn {
+  --mdc-protected-button-container-color: red !important;
+  --mdc-protected-button-label-text-color: #fff;
+}

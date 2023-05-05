@@ -1,0 +1,53 @@
+.grid-container {
+    padding: 20px;
+  }
+
+  .grid-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .grid-container-body{
+    width: 100%;
+    height: 100%;
+   
+  }
+
+ .container-table{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .container-table-body{
+    background-color: #424242;
+    width: 70%;
+ }
+
+ .button-table{
+    color: #fff;
+    background-color: transparent;
+    border-color: transparent;
+ }
+
+
+ /* Tamaño menor a 600px */
+@media screen and (max-width: 800px) {
+ 
+  .grid-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .container-table-body{
+    width: 100%;
+ }
+
+}

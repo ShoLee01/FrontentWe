@@ -1,0 +1,177 @@
+.container-body{
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    max-height: 100vh;
+    box-sizing: border-box; /* Agregue esta línea */
+  }
+
+  .container-l{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #494B5F;
+    width: 100%;
+    height: 100%;
+  }
+
+/*   .container-r{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e5f3fb;
+    width: 20%;
+  } */
+
+  .container-form-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /*  */
+
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  .cover-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+  }
+  
+  .cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-image-container {
+    position: absolute;
+    bottom: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .info-container {
+    position: relative;
+    width: 95%;
+    height: 100%;
+    margin-top: calc(8vh + 10px);
+    padding: 20px;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+   /*  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); */
+  }
+  .edit-cover-icon {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
+    color: #232020;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  
+  .edit-profile-icon{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
+    color: #232020;
+    cursor: pointer;
+    font-size: 16px;
+    bottom: 50%;
+    right: calc(50% - 20px); /* Posiciona el ícono en la mitad del contenedor, menos la mitad del ancho del ícono */
+    transform: translateY(20%); /* Mueve el ícono hacia arriba para que quede alineado con la parte inferior de la imagen de perfil */
+
+  }
+  
+  .edit-cover-icon {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .edit-profile-icon {
+    bottom: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+  }
+
+  .container-input{
+    width: 100%;
+  }
+
+  
+  .input{
+    width: 100%;
+    }   
+
+    .error-message {
+        color: #fff;
+        margin-left: 20px;
+        font-size: 12px;
+      }
+
+      .custom-padding {
+        padding-left: 5 !important;
+        padding-right: 5 !important;
+      }
+
+  @media (max-width: 900px) {
+    * {
+      box-sizing: border-box;
+    }
+      .container-body{
+        display: flex;
+        flex-direction: column-reverse;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+       }
+      .container-l{
+          height: 100%;
+          width: 100%;
+          overflow-y: auto; /* Cambie aquí a auto */
+          overflow-x: hidden; /* Asegúrese de que el desplazamiento horizontal esté oculto */        
+      }
+      .container-r{
+          display: none;
+      }
+      .input{
+          width: 100%;
+      }
+      
+  }

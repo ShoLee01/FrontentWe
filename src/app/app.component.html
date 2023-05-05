@@ -1,5 +1,6 @@
 <mat-toolbar class="toolbar toolbar-container">
-  <span>WeStudy University</span>
+  <span *ngIf="isAdmin">WeStudy University</span>
+  <span *ngIf="!isAdmin">WeStudy Admin</span>
   <span class="example-spacer"></span>
 
   <div class="navbar">
@@ -8,15 +9,18 @@
       <button *ngIf="isSmallScreen" mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>menu</mat-icon>
       </button>
-      <button *ngIf="!isLogged&&!isSmallScreen" mat-raised-button class="button-color" (click)="nextPage('/login')">Iniciar sesión</button>
-      <button *ngIf="!isLogged&&!isSmallScreen" mat-raised-button class="button-color" (click)="nextPage('/register')">Regístrate</button>
-      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button color="primary">
-        <mat-icon>account_circle</mat-icon> Profile 
+      <button *ngIf="!isLogged&&!isSmallScreen&&isAdmin" mat-raised-button class="button-color" (click)="nextPage('/login')">Iniciar sesión</button>
+      <button *ngIf="!isLogged&&!isSmallScreen&&isAdmin" mat-raised-button class="button-color" (click)="nextPage('/register')">Regístrate</button>
+      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button class="button-color" (click)="nextPage('/profile')">
+        <mat-icon>account_circle</mat-icon> Perfil 
       </button>
-      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button color="primary">
-        <mat-icon>favorite</mat-icon> Favorites
+      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button class="button-color" (click)="nextPage('/principal')">
+        <mat-icon>dashboard icon</mat-icon> Cursos
       </button>
-      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button color="primary" (click)="logout()">
+      <button *ngIf="isLogged&&!isSmallScreen" mat-raised-button class="button-color" (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+      <button *ngIf="isLoggedAdmin&&!isSmallScreen" mat-raised-button class="button-color" (click)="logoutAdmin()">
         <mat-icon>logout</mat-icon> Logout
       </button>
       
@@ -26,15 +30,18 @@
 </mat-toolbar>
 
 <mat-menu #menu="matMenu" class="custom-menu">
-  <button *ngIf="!isLogged" mat-menu-item class="button-color" (click)="nextPage('/login')">Iniciar sesión</button>
-  <button *ngIf="!isLogged" mat-menu-item class="button-color" (click)="nextPage('/register')">Regístrate</button>
-  <button *ngIf="isLogged" mat-menu-item color="primary">
+  <button *ngIf="!isLogged&&isAdmin" mat-menu-item class="button-color" (click)="nextPage('/login')">Iniciar sesión</button>
+  <button *ngIf="!isLogged&&isAdmin" mat-menu-item class="button-color" (click)="nextPage('/register')">Regístrate</button>
+  <button *ngIf="isLogged" mat-menu-item color="primary" (click)="nextPage('/profile')">
     <mat-icon>account_circle</mat-icon> Profile
   </button>
-  <button *ngIf="isLogged" mat-menu-item color="primary">
-    <mat-icon>favorite</mat-icon> Favorites
+  <button *ngIf="isLogged" mat-menu-item color="primary" (click)="nextPage('/principal')">
+    <mat-icon>dashboard icon</mat-icon> Cursos
   </button>
   <button *ngIf="isLogged" mat-menu-item color="primary" (click)="logout()">
+    <mat-icon>logout</mat-icon> Logout
+  </button>
+  <button *ngIf="isLoggedAdmin" mat-menu-item color="primary" (click)="logoutAdmin()">
     <mat-icon>logout</mat-icon> Logout
   </button>
 </mat-menu>

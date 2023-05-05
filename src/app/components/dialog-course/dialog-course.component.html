@@ -1,0 +1,180 @@
+<h1 mat-dialog-title class="text-center m-0">Registro del Curso</h1>
+<div mat-dialog-content class="p-4 custom-content">
+    <form [formGroup]="courseForm" class="custom-content p-4">
+        <div class="row">
+
+            <h2 class="text-sub-title">
+                <mat-icon style="margin-right: 6px;">info</mat-icon>
+                Estos datos se mostrarán en los cursos de la plataforma
+            </h2>
+
+
+            <mat-form-field appearance="outline">
+                <mat-label>Titulo del curso</mat-label>
+                <input formControlName="title" matInput placeholder="Titulo del curso">
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+                <mat-label>Tipo de programa</mat-label>
+                <mat-select formControlName="type_of_program" placeholder="Tipo de programa" [(ngModel)]="type_of_program_selected">
+                    <mat-option *ngFor="let program of program_types" [value]="program.id">{{program.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <div class="d-flex">
+                <div class="file-input-container">
+                    <button mat-raised-button type="button" (click)="backgroundFileInput.click()">Seleccionar imagen de
+                        fondo</button>
+                    <div class="name-file">
+                        <input hidden formControlName="background_image" #backgroundFileInput type="file"
+                            (change)="onFileChange($event, 'background')">
+                        <span class="name-text" *ngIf="backgroundName">{{ backgroundName }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de inscripción de curso</mat-label>
+            <input formControlName="registration_date" matInput [matDatepicker]="startPickerTwo">
+            <mat-datepicker-toggle matSuffix [for]="startPickerTwo"></mat-datepicker-toggle>
+            <mat-datepicker #startPickerTwo></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de inicio del curso</mat-label>
+            <input formControlName="start_of_course" matInput [matDatepicker]="startPicker">
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de fin del curso</mat-label>
+            <input formControlName="end_of_course" matInput [matDatepicker]="endPicker">
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="d-flex flex-column justify-content-start" style="width: 100%;">
+            <label>Descuento del curso:</label>
+            <mat-slider
+                [max]= 100
+                [min]= 0
+                [step]= 1
+                [discrete]="true"
+                [showTickMarks]="true">
+      <input formControlName="discount" matSliderThumb />
+    </mat-slider>
+        </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Precio del curso</mat-label>
+            <input formControlName="price" matInput type="number" placeholder="Precio del curso">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Idioma del curso</mat-label>
+            <mat-select formControlName="language" placeholder="Idioma del curso">
+                <mat-option *ngFor="let languageOption of languages"
+                    [value]="languageOption">{{languageOption}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+       
+
+        <div class="d-flex justify-items-center align-items-center" style="width: 100%;">
+            <mat-form-field appearance="outline" style="width: 85%;">
+                <mat-label>Categoría del curso</mat-label>
+                <mat-select formControlName="category" placeholder="Categoría del curso">
+                    <mat-option *ngFor="let categoryOption of CustomCategorySelected()"
+                        [value]="categoryOption.id">{{categoryOption.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button style="width: 15%; margin-left: 15px;margin-bottom: 20px;" mat-raised-button color="primary" type="button" (click)="CategorySelected()"><mat-icon>add</mat-icon></button>
+        </div>
+        <div class="d-flex justify-items-center align-items-center" style="width: 100%; margin-bottom: 20px;">
+            <div class="shift-tags">
+                <span *ngFor="let category of categoriesSelected; let i = index" class="shift-tag">{{ category.name }} <button style="text-decoration: none;" (click)="deleteCategory(i)">X</button></span>
+            </div>
+        </div>
+
+        
+
+        <mat-form-field appearance="outline">
+            <mat-label>Modalidad del curso</mat-label>
+            <mat-select formControlName="modality" placeholder="Modalidad del curso" [(ngModel)]="modality_selected">
+                <mat-option *ngFor="let modalityOption of modalities"
+                    [value]="modalityOption.id">{{modalityOption.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="shift-container">
+            <h2>Agregar Turno</h2>
+            <div class="shift-inputs">
+                <mat-form-field appearance="outline" style="margin-left: 15px;">
+                    <mat-label>Hora de inicio</mat-label>
+                    <input #startTimeInput matInput type="time" placeholder="Hora de inicio">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" style="margin-left: 15px;">
+                    <mat-label>Hora de fin</mat-label>
+                    <input #endTimeInput matInput type="time" placeholder="Hora de fin">
+                </mat-form-field>
+
+                <button style="margin-left: 15px;margin-bottom: 20px;" mat-raised-button color="primary"
+                    (click)="addShift(startTimeInput.value, endTimeInput.value)">Agregar turno</button>
+            </div>
+
+            <div class="shift-tags">
+                <span *ngFor="let shift of shifts; let i = index" class="shift-tag">{{ shift.start_time.slice(0, -3) }} - {{ shift.end_time.slice(0, -3) }} <button style="text-decoration: none;" (click)="deleteShift(i)">X</button></span>
+            </div>
+        </div>
+
+        <h2 class="text-sub-title">
+            <mat-icon style="margin-right: 6px;">info</mat-icon>
+            Estos datos se mostrarán como información adicional del curso
+        </h2>
+
+        <mat-form-field appearance="outline">
+            <mat-label>País del curso</mat-label>
+            <mat-select formControlName="country" placeholder="País del curso">
+                <mat-option *ngFor="let countryOption of countries"
+                    [value]="countryOption">{{countryOption}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Ciudad del curso</mat-label>
+            <input formControlName="city" matInput placeholder="Ciudad del curso">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Link del curso</mat-label>
+            <input formControlName="link" matInput placeholder="Link del curso">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Número de profesores</mat-label>
+            <input formControlName="number_of_teachers" matInput type="number" placeholder="Número de horas del curso">
+        </mat-form-field>
+
+        <label>Acepta cuotas:</label>
+        <mat-radio-group formControlName="accept_installments">
+            <mat-radio-button [value]="true">Sí</mat-radio-button>
+            <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+
+        <label>Requiere requisitos:</label>
+        <mat-radio-group formControlName="requirements">
+            <mat-radio-button [value]="true">Sí</mat-radio-button>
+            <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+
+    </form>
+</div>
+<div mat-dialog-actions [align]="'end'">
+    <button mat-raised-button color="warn" mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary" (click)="submitForm()">{{ actionBtn }}</button>
+</div>

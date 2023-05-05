@@ -91,7 +91,8 @@
     <!-- Segundo paso del registro -->
     <div *ngIf="isRegister && !isConfirm" class="container-form" mat-card-content>
       <div class="scroll-container">
-        <h1 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><span>Complete el
+        <div class="container-body-scroll">
+          <h1 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><span>Complete el
             registro</span>
         </h1>
         <h2 mat-dialog-title class="text p-0" style="text-align: start; margin-top: 2%;"><span>Ingrese todos los campos
@@ -104,8 +105,8 @@
             <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
               <div class="form-group">
                 <mat-form-field appearance="outline" class="input">
-                  <mat-label>Nombre</mat-label>
-                  <input formControlName="name" matInput placeholder="Universidad ABC">
+                  <mat-label>Nombre de la institución</mat-label>
+                  <input formControlName="name" matInput placeholder="Universidad">
                   <mat-error>
                     El nombre es <strong>requerido</strong>
                   </mat-error>
@@ -113,65 +114,39 @@
               </div>
             </div>
 
-            <!-- Clasificación a nivel mundial -->
-            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
-              <div class="form-group">
-                <mat-form-field appearance="outline" class="input">
-                  <mat-label>Clasificación a nivel mundial</mat-label>
-                  <input formControlName="global_ranking" matInput placeholder="1000" type="number">
-                </mat-form-field>
-              </div>
-            </div>
-
-            <!-- Clasificación a nivel mundial -->
-            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
-              <div class="form-group">
-                <mat-form-field appearance="outline" class="input">
-                  <mat-label>Clasificación a nivel nacional</mat-label>
-                  <input formControlName="national_level_ranking" matInput placeholder="1000" type="number">
-                  <mat-error>
-                    La clasificación a nivel nacional es <strong>requerida</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
-
-            <!-- Clasificación a nivel mundial -->
-            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
-              <div class="form-group">
-                <mat-form-field appearance="outline" class="input">
-                  <mat-label>Clasificación a nivel Latinoamericano</mat-label>
-                  <input formControlName="latin_american_ranking" matInput placeholder="1000" type="number">
-                  <mat-error>
-                    La clasificación a nivel latinoamericano es <strong>requerida</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
-
             <!-- Nombre del Pais -->
-            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
-              <div class="form-group">
-                <mat-form-field appearance="outline" class="input">
-                  <mat-label>País</mat-label>
-                  <input formControlName="country" matInput placeholder="Universidad ABC">
-                  <mat-error>
-                    El país es <strong>requerido</strong>
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 custom-padding">
+ 
+              <mat-form-field appearance="outline" class="input">
+                <mat-label>País de residencia</mat-label>
+                <mat-select formControlName="country" placeholder="País del curso">
+                    <mat-option *ngFor="let countryOption of countries"
+                        [value]="countryOption">{{countryOption}}</mat-option>
+                </mat-select>
+                <mat-error>
+                  El país es <strong>requerido</strong>
+                </mat-error>
+            </mat-form-field>
+      
+          </div>
 
             <!-- Nombre de la cuidad -->
             <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding">
               <div class="form-group">
                 <mat-form-field appearance="outline" class="input">
                   <mat-label>Cuidad</mat-label>
-                  <input formControlName="city" matInput placeholder="Universidad ABC">
+                  <input formControlName="city" matInput placeholder="Florida">
                   <mat-error>
                     La cuidad es <strong>requerida</strong>
                   </mat-error>
                 </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Certificada por Sunedu -->
+            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding file-input-container">
+              <div class="form-group">
+                <mat-checkbox formControlName="verified">Certificada por Sunedu</mat-checkbox>
               </div>
             </div>
 
@@ -206,12 +181,7 @@
               </div>
             </div>
 
-            <!-- Certificada por Sunedu -->
-            <div class="col-xs-12 col-sm-6 col-md-6 p-0 ps-4 custom-padding file-input-container">
-              <div class="form-group">
-                <mat-checkbox formControlName="verified">Certificada por Sunedu</mat-checkbox>
-              </div>
-            </div>
+            
 
             <div class="col-xs-12 col-sm-12 col-md-12 p-0 ps-4 custom-padding file-input-container">
               <div class="form-group">
@@ -230,6 +200,7 @@
             </div>
           </div>
         </form>
+        </div>
       </div>
     </div>
     <!-- Tercer paso del registro -->

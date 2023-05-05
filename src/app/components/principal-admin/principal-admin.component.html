@@ -1,0 +1,48 @@
+<div class="grid-container">
+    <div class="grid-container-body d-flex justify-content-between">
+      <h1 class="font-style">Universidades</h1>
+      <button mat-raised-button color="primary" class="add-button button-secondary" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        <span>Actualizar</span>
+      </button>
+    </div>
+    <div class="container-table">
+      <div class="container-table-body">
+        <div style="margin-top: 10px;">
+          <mat-form-field style="padding-left: 30px; padding-top: 20px;" appearance="outline">
+            <mat-label>Filtro</mat-label>
+            <input style="color: #fff" matInput (keyup)="applyFilter($event)" placeholder="Universidad" #input>
+          </mat-form-field>
+  
+          <div class="mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" matSort>
+  
+              <!-- Name -->
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre de institución </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+              </ng-container>
+  
+              <!-- activation_code -->
+              <ng-container matColumnDef="activation_code">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Código de activación </mat-header-cell>
+                <mat-cell *matCellDef="let row"><button class="button-table" (click)="copyToClipboard(row.activation_code)">{{row.activation_code}} </button> </mat-cell>
+              </ng-container>
+  
+              <!-- Agregar las etiquetas mat-header-row y mat-row aquí -->
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" style="padding-top: 10px; padding-left: 10px;" *matNoDataRow>
+                <td style="color: #fff;" class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              </tr>
+            </mat-table>
+  
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of universities"></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

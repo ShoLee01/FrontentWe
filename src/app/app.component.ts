@@ -16,6 +16,8 @@ export class AppComponent {
   title = 'ClimbAway';
   user : any ;
   isLogged: boolean = false;
+  isLoggedAdmin: boolean = false;
+  isAdmin : boolean = true;
   isSmallScreen: boolean = false;
   
   constructor(private router: Router, 
@@ -34,13 +36,28 @@ export class AppComponent {
       this.changeDetector.markForCheck(); // Añade esta línea
     });
     this.changeHandler();
-    this.validateUserExist();
+    this.changeHandlerAdmin();
+    this.changeHandlerLogin();
+    this.validateUserExistLogin();
+    
   }
 
   logout(){
+    this.isLoggedAdmin = false;
+    this.isAdmin = true;
+    this.isLogged = false;
+    this.change.changeHandler$.emit(true);
     localStorage.removeItem('addUsuario');
     this.router.navigate(['/login']);
-    this.change.changeHandler$.emit(true);
+  }
+
+  logoutAdmin(){
+    this.isLoggedAdmin = false;
+    this.isAdmin = true;
+    this.isLogged = false;/* 
+    this.change.changeHandlerAdmin$.emit(true); */
+    localStorage.removeItem('addUsuario');
+    this.router.navigate(['/login-admin']);
   }
 
   getUser(){
@@ -52,12 +69,39 @@ export class AppComponent {
       this.validateUserExist();
     });
   }
+  changeHandlerAdmin(){
+    this.change.changeHandlerAdmin$.subscribe((data: any) => {
+      this.validateUserExistAdmin();
+    });
+  }
+
+  validateUserExistLogin(){
+    this.change.changeHandlerLoginUser$.subscribe((data: any) => {
+      this.validateUserExist();
+    });
+  }
+
+  changeHandlerLogin(){
+    this.change.changeHandlerLogin$.subscribe((data: any) => {
+      this.isAdmin = false;
+    });
+   
+  }
+
+  validateUserExistAdmin(){
+    if(this.sharedService.getAddUsuario()){
+      this.isLoggedAdmin = true;
+    }else{;
+      this.isLoggedAdmin = false;
+      this.router.navigate(['/login-admin']);
+    }
+  }
 
   validateUserExist(){
     if(this.sharedService.getAddUsuario()){
       this.isLogged = true;
       this.getUser();
-    }else{
+    }else{;
       this.isLogged = false;
       this.router.navigate(['/login']);
     }
