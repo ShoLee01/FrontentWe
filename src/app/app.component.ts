@@ -67,6 +67,7 @@ export class AppComponent {
   changeHandler(){
     this.change.changeHandler$.subscribe((data: any) => {
       this.validateUserExist();
+      
     });
   }
   changeHandlerAdmin(){
@@ -78,6 +79,7 @@ export class AppComponent {
   validateUserExistLogin(){
     this.change.changeHandlerLoginUser$.subscribe((data: any) => {
       this.validateUserExist();
+      this.isAdmin = true;
     });
   }
 
