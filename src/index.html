@@ -10,6 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+<base href="/">
+<script>
+  if (location.pathname !== '/') {
+    history.replaceState(null, null, location.pathname + location.search + '#/' + location.hash.slice(1));
+  }
+</script>
 <body class="mat-typography">
   <app-root></app-root>
 </body>
