@@ -52,6 +52,10 @@ export class LoginAdminComponent implements OnInit {
     });
   }
 
+  univeristy() {
+    this.router.navigate(['login']);
+  }
+
 
   signIn() {
     if (this.loginForm.valid) {
