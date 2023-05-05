@@ -59,6 +59,15 @@
     background-color: #577df7 !important;
     border-radius: 20px;
   }
+
+  .button-color-admin{
+    width: 100%;
+    height: 2.9em;
+    font-size: 1.2em;
+    background-color: #ffffff !important;
+    color: #577df7;
+    border-radius: 20px;
+  }
   
   .text{
     color: #fff;

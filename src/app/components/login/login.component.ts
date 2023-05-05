@@ -52,6 +52,9 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  Administrator() {
+    this.router.navigate(['login-admin']);
+  }
 
   signIn() {
     if (this.loginForm.valid) {

@@ -142,7 +142,7 @@ export class ProfileComponent {
 
     this.api.registeredAccount({password: this.ProfileForm.value.email}).subscribe({
       next: (result: any) => {
-        if(result.university){
+        if(result.university || this.ProfileForm.value.email == this.user.email){
           this.api.updateProfile(data).subscribe({
             next: (result: any) => {
               this.snackBar.open('Perfil actualizado correctamente', 'Cerrar', {
