@@ -33,6 +33,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DialogCourseComponent } from './components/dialog-course/dialog-course.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DialogComponent } from './components/share/dialog/dialog.component';
 import { LoginAdminComponent } from './components/login-admin/login-admin.component';
@@ -86,7 +87,7 @@ import { PrincipalAdminComponent } from './components/principal-admin/principal-
     MatNativeDateModule,
     MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
