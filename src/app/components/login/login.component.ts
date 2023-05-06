@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -20,11 +20,13 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   passwordType: string = 'password';
   passwordShown: boolean = false;
+  loading: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     public api: ApiService,
     private router: Router,
+    private changeDetector: ChangeDetectorRef,
     private change: InterconnectionService,
     private sharedService: SharedService,
     private snackBar: MatSnackBar,
@@ -57,6 +59,7 @@ export class LoginComponent implements OnInit {
   }
 
   signIn() {
+    this.loading = true;
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
       this.api.login(this.loginForm.value).subscribe(
@@ -68,10 +71,14 @@ export class LoginComponent implements OnInit {
             this.loginForm.reset();
             this.router.navigate(['principal']);
             this.showSnackBar('Inicio de sesión exitoso');
+            this.loading = false;
+            this.changeDetector.markForCheck();
           },
           error: (error) => {
             console.log(error, 'error de login');
             this.showSnackBar('Creedenciales incorrectas o usuario no activo');
+            this.loading = false;
+            this.changeDetector.markForCheck();
           }
         }
       );

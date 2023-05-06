@@ -25,7 +25,10 @@
         </form>
       </div>
       <div class="botton-form">
-        <button mat-raised-button class="button-color" style="margin-bottom: 15px;" (click)="signIn()">inicia sesión</button>
+        <button *ngIf="!loading" mat-raised-button class="button-color" style="margin-bottom: 15px;" (click)="signIn()">inicia sesión</button>
+        <button *ngIf="loading" mat-raised-button class="button-color" style="margin-bottom: 15px;">
+          <mat-spinner [diameter]="40"></mat-spinner>
+        </button>
         <button mat-raised-button class="button-color-uni" (click)="univeristy()">soy universidad</button>
       </div>
     </div>
