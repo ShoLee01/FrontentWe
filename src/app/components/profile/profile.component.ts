@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   ProfileForm!: FormGroup;
   countries = ["Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba", "Ecuador", "El Salvador", "Guatemala", "Honduras", "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "Puerto Rico", "República Dominicana", "Uruguay", "Venezuela"]
   passwordType: string = 'password';
@@ -62,6 +62,9 @@ export class ProfileComponent {
     this.getInformation();
     console.log(this.passwordSame);
   }
+  ngOnInit(): void {
+    this.change.changeHandler$.emit(true);
+  }
 
 
 
@@ -100,26 +103,32 @@ export class ProfileComponent {
       if (type === 'background') {
         this.backgroundName = event.target.files[0].name;
         this.backgroundFile = event.target.files[0];
-        this.api.updateProfile({ background_image: this.backgroundFile }).subscribe({
+        let data = new FormData();
+        data.append('background_image', this.backgroundFile as Blob);
+        this.api.updateProfile(data).subscribe({
           next: (result: any) => {
-            this.snackBar.open('Imagen de fondo actualizada correctamente', 'Cerrar', {
-              duration: 2000,
-            });
+            this.getInformation();
+            this.showSnackBar('Imagen de fondo actualizada correctamente');
           },
           error: (error: any) => {
+            this.showSnackBar('Error al actualizar la imagen de fondo');
             console.log(error);
           }
         });
       } else if (type === 'logo') {
         this.logoName = event.target.files[0].name;
         this.logoFile = event.target.files[0];
-        this.api.updateProfile({ logo: this.logoFile }).subscribe({
+        const logo = new FormData();
+        logo.append('logo', this.logoFile as Blob);
+        this.api.updateProfile(logo).subscribe({
           next: (result: any) => {
-            this.snackBar.open('Logo actualizado correctamente', 'Cerrar', {
-              duration: 2000,
-            });
+            this.getInformation();
+            this.showSnackBar('Logo actualizado correctamente');
           },
           error: (error: any) => {
+            this.showSnackBar('Error al actualizar el logo');
+            console.log({ logo: this.logoFile });
+            console.log(this.logoFile);
             console.log(error);
           }
         });
@@ -132,8 +141,8 @@ export class ProfileComponent {
       duration: 3000,
     });
   }
+  
   save(){
-
     let data = this.ProfileForm.value;
     delete data.logo;
     delete data.background_image;
@@ -145,9 +154,7 @@ export class ProfileComponent {
         if(result.university || this.ProfileForm.value.email == this.user.email){
           this.api.updateProfile(data).subscribe({
             next: (result: any) => {
-              this.snackBar.open('Perfil actualizado correctamente', 'Cerrar', {
-                duration: 2000,
-              });
+              this.showSnackBar('Perfil actualizado correctamente');
             },
             error: (error: any) => {
               console.log(error);

@@ -9,6 +9,7 @@ import { DialogCourseComponent } from '../dialog-course/dialog-course.component'
 import { ApiService } from 'src/app/service/api.service';
 import { Observable, of } from 'rxjs';
 import { DialogComponent } from '../share/dialog/dialog.component';
+import { InterconnectionService } from 'src/app/service/interconnection.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,6 +26,7 @@ export class DashboardComponent implements OnInit {
     private api : ApiService,
     private breakpointObserver: BreakpointObserver,
     private changeDetector: ChangeDetectorRef,
+    private change: InterconnectionService,
     private router: Router,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
@@ -78,16 +80,7 @@ export class DashboardComponent implements OnInit {
       this.changeDetector.markForCheck();
     });
 
-    
-
- /*    console.log(this.numColumns); */
-
-     /*  setTimeout(() => {
-        this.loading = false; // actualizar la variable loading después de 3 segundos
-        this.changeDetector.detectChanges(); // invocar la función changeDetector.detectChanges() después de 3 segundos
-      }, 3000); 
-      setTimeout(() => { }, 3000);*/
-
+    this.change.changeHandler$.emit(true);
     }
 
     ngOnDestroy(): void {

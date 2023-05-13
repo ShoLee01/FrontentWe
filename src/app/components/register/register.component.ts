@@ -89,6 +89,8 @@ export class RegisterComponent implements OnInit {
 
   signUpConfirm() {
     if(this.RegisterForm.valid){
+      this.RegisterForm.value.background_image = null;
+      this.RegisterForm.value.logo = null;
       let data = {...this.RegisterProcessForm.value, ...this.RegisterForm.value};
       this.api.createAccount(data).subscribe({
         next: (result: any) => {
@@ -98,6 +100,7 @@ export class RegisterComponent implements OnInit {
           this.changeDetector.detectChanges();
         },
         error: (error: any) => {
+           console.log(data);
           this.showSnackBar('Error al crear la cuenta');
         }
       });

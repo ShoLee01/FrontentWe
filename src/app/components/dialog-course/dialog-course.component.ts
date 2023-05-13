@@ -1,13 +1,33 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, Inject } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators,FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ApiService } from 'src/app/service/api.service';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+}
+
 @Component({
   selector: 'app-dialog-course',
   templateUrl: './dialog-course.component.html',
-  styleUrls: ['./dialog-course.component.css']
+  styleUrls: ['./dialog-course.component.css'],
+  providers: [
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  ],
 })
 export class DialogCourseComponent implements OnInit {
   courseForm !: FormGroup;
@@ -18,8 +38,9 @@ export class DialogCourseComponent implements OnInit {
   categoriesSelected : { id: any; name: any, number_of_courses: any }[] = [];
   modalities : any;
   //Paises de latinoamerica
-  shifts: { start_time: string; end_time: string }[] = []; // Agrega un array para guardar los turnos
+  shifts: { start_time: string; end_time: string, weekday: string }[] = [];
   countries = ["Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba", "Ecuador", "El Salvador", "Guatemala", "Honduras", "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "Puerto Rico", "República Dominicana", "Uruguay", "Venezuela"]
+  day = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]; // Agrega un array para guardar los dias
   backgroundFile: File | null = null;
   backgroundName: string = '';
   values = 0;
@@ -28,6 +49,7 @@ export class DialogCourseComponent implements OnInit {
   constructor(private formBuider :FormBuilder,
     private api : ApiService,
     private snackBar: MatSnackBar,
+    private datePipe: DatePipe,
     private changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public editData: any,
    private dialogRef : MatDialogRef<DialogCourseComponent>) { 
@@ -75,7 +97,6 @@ export class DialogCourseComponent implements OnInit {
       // Boleam que indica si requiere requisitos para llevarlo (mat-radio-group)
       requirements : [false],
       // numero de estrellas que tendrá el curso (mat-slider) que va de 0 a 5
-      //number_of_stars : [0],
       // Fecha de inicio del curso (mat-datepicker-toggle)
       start_of_course : ['', Validators.required],
       // Fecha de fin del curso (mat-datepicker-toggle)
@@ -93,7 +114,7 @@ export class DialogCourseComponent implements OnInit {
       // Idioma en el que se llevará a cabo el curso (mat-select) (mat-option)
       language : ['', Validators.required],
       // Número de horas que tendrá el curso (input type="number")
-      number_of_teachers : [0, Validators.required],
+      number_of_teachers : [0],
       // Booleam que indica si se puede pagar en cuotas (mat-radio-group)
       accept_installments : [false],
       // Catergoría del curso (mat-select) (mat-option)
@@ -137,6 +158,10 @@ export class DialogCourseComponent implements OnInit {
     }
   }
   
+  formatDate(event: any): void {
+    const formattedDate = this.datePipe.transform(event.value, 'dd/MM/yyyy');
+    // Use the formatted date as needed
+  }
 
   deleteCategory(index: any){
     this.categoriesSelected.splice(index, 1);
@@ -161,12 +186,20 @@ export class DialogCourseComponent implements OnInit {
     }
   }
 
-  isShiftValid(startTime: string, endTime: string): boolean {
+  isShiftValid(startTime: string, endTime: string, weeday: string): boolean {
     // Implementa la lógica para validar el turno
+    console.log(startTime, endTime, weeday);
     if (startTime === endTime) return false;
     if (startTime >= endTime) return false;
-    for (const shift of this.shifts) {
-      if (shift.start_time === startTime && shift.end_time === endTime) return false;
+    if (weeday == undefined) return false;
+    startTime = startTime + ':00';
+    endTime = endTime + ':00'; 
+    for (let shift of  this.shifts) {
+        console.log(shift);
+      if (shift.start_time == startTime && shift.end_time == endTime && shift.weekday == weeday) {
+        this.showSnackBar('El turno ya existe');
+        return false;
+      }
     }
     return true;
   }
@@ -175,16 +208,15 @@ export class DialogCourseComponent implements OnInit {
     this.shifts.splice(index, 1);
   }
 
-  addShift(startTime: string, endTime: string): void {
+  addShift(startTime: string, endTime: string, weeday: string): void {
     // Implementa la lógica para agregar un turno
-    if (this.isShiftValid(startTime, endTime)) {
+    if (this.isShiftValid(startTime, endTime, weeday)) {
       startTime = startTime + ':00';
       endTime = endTime + ':00'; 
-      this.shifts.push({ start_time: startTime, end_time: endTime });
+      this.shifts.push({ start_time: startTime, end_time: endTime, weekday: weeday });
     } else {
-      console.log('Turno inválido');
-    }
-    console.log(this.shifts);
+      this.showSnackBar('El turno no es válido');
+    };
   }
 
   findElementsByDelete(Presente: any[], Pasado: any[]): any[] {

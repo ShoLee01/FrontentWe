@@ -32,7 +32,7 @@
               </div>
               <div class="discount">
                 <div><p class="text-discount">Hasta un -{{card.discount}}%</p></div>
-                <div><p class="text-price">S/.{{card.price}}</p></div>
+                <div><p class="text-price">S/.{{card.price | number:'1.2-2'}}</p></div>
               </div>
             </div>
             <mat-card-content class="dashboard-card-content">

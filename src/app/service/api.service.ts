@@ -68,8 +68,9 @@ export class ApiService {
     return this.http.post(this.basePath + 'university/registered_accounts/', data);
   }
 
-  updateProfile(data: any) {
-    return this.http.patch(this.basePath + 'university/update/' + this.user.university.id, data, { headers: this.headers });
+  updateProfile(data: any, id: any=0) {
+    let id_dig = (id==0) ? this.user.university.id : id;
+    return this.http.patch(this.basePath + 'university/update/' + id_dig , data, { headers: this.headers });
   }
 
   registerUniversity(data: any) {

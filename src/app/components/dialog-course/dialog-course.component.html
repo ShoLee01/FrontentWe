@@ -4,8 +4,8 @@
         <div class="row">
 
             <h2 class="text-sub-title">
-                <mat-icon style="margin-right: 6px;">info</mat-icon>
-                Estos datos se mostrarán en los cursos de la plataforma
+                <mat-icon class="icon-title" style="margin-right: 6px;" >info</mat-icon>
+                <span>Estos datos se mostrarán en los cursos de la plataforma</span>
             </h2>
 
 
@@ -37,8 +37,8 @@
         </div>
 
         <mat-form-field appearance="outline">
-            <mat-label>Fecha de inscripción de curso</mat-label>
-            <input formControlName="registration_date" matInput [matDatepicker]="startPickerTwo">
+            <mat-label>Cierre de inscripciones</mat-label>
+            <input formControlName="registration_date" matInput [matDatepicker]="startPickerTwo" (dateChange)="formatDate($event)">
             <mat-datepicker-toggle matSuffix [for]="startPickerTwo"></mat-datepicker-toggle>
             <mat-datepicker #startPickerTwo></mat-datepicker>
         </mat-form-field>
@@ -113,28 +113,38 @@
         <div class="shift-container">
             <h2>Agregar Turno</h2>
             <div class="shift-inputs">
-                <mat-form-field appearance="outline" style="margin-left: 15px;">
+                <mat-form-field appearance="outline" class="shift-input">
                     <mat-label>Hora de inicio</mat-label>
                     <input #startTimeInput matInput type="time" placeholder="Hora de inicio">
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" style="margin-left: 15px;">
+                <mat-form-field appearance="outline" class="shift-input">
                     <mat-label>Hora de fin</mat-label>
                     <input #endTimeInput matInput type="time" placeholder="Hora de fin">
                 </mat-form-field>
 
+
+                <mat-form-field appearance="outline" class="shift-input">
+                    <mat-label>Días de la semana</mat-label>
+                    <mat-select placeholder="Día de la semana"  #endWeeday matInput>
+                        <mat-option *ngFor="let dayOption of day"
+                            [value]="dayOption">{{dayOption}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
                 <button style="margin-left: 15px;margin-bottom: 20px;" mat-raised-button color="primary"
-                    (click)="addShift(startTimeInput.value, endTimeInput.value)">Agregar turno</button>
+                    (click)="addShift(startTimeInput.value, endTimeInput.value, endWeeday.value)">Agregar turno</button>
             </div>
 
             <div class="shift-tags">
                 <span *ngFor="let shift of shifts; let i = index" class="shift-tag">{{ shift.start_time.slice(0, -3) }} - {{ shift.end_time.slice(0, -3) }} <button style="text-decoration: none;" (click)="deleteShift(i)">X</button></span>
             </div>
         </div>
+        <mat-divider></mat-divider>
 
-        <h2 class="text-sub-title">
-            <mat-icon style="margin-right: 6px;">info</mat-icon>
-            Estos datos se mostrarán como información adicional del curso
+        <h2 class="text-sub-title" style="margin-top: 10px;">
+            <mat-icon class="icon-title" style="margin-right: 6px;">info</mat-icon>
+            <span>Estos datos se mostrarán como información adicional del curso</span>
         </h2>
 
         <mat-form-field appearance="outline">
@@ -157,7 +167,7 @@
 
         <mat-form-field appearance="outline">
             <mat-label>Número de profesores</mat-label>
-            <input formControlName="number_of_teachers" matInput type="number" placeholder="Número de horas del curso">
+            <input formControlName="number_of_teachers" matInput type="number" placeholder="Número de profesores">
         </mat-form-field>
 
         <label>Acepta cuotas:</label>
