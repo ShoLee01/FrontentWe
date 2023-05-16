@@ -78,6 +78,11 @@
     --mat-mdc-slider-focus-ripple-color: rgba(194, 24, 91, 0.2);
 }
 
+.mat-mdc-raised-button.mat-unthemed {
+  --mdc-protected-button-container-color: #4B7EFF;
+  --mdc-protected-button-label-text-color: #4B7EFF;
+  color: #fff;
+}
 .mat-mdc-radio-button.mat-accent {
   --mdc-radio-disabled-selected-icon-color: #fff;
   --mdc-radio-disabled-unselected-icon-color: #fff;

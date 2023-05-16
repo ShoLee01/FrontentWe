@@ -26,29 +26,39 @@
                 <button mat-menu-item (click)="editCard(card)">Editar</button>
                 <button mat-menu-item (click)="deleteCard(card)">Eliminar</button>
               </mat-menu>
+              <div class="link">
+                <a href="{{card.link}}" target="_blank">
+                  <mat-icon style="color: white; margin: 0;">launch</mat-icon>
+                </a>
+                
+              </div>
               <div class="date">
                 <div><b>{{card.start_of_course | date: 'dd'}}</b></div>
                 <div>{{card.start_of_course | date: 'MMM'}}</div>
               </div>
               <div class="discount">
-                <div><p class="text-discount">Hasta un -{{card.discount}}%</p></div>
+                <div *ngIf="card.discount>0"><p class="text-discount">Hasta un -{{card.discount}}%</p></div>
                 <div><p class="text-price">S/.{{card.price | number:'1.2-2'}}</p></div>
               </div>
             </div>
             <mat-card-content class="dashboard-card-content">
               <h3><p class="text-title">{{card.title}}</p></h3>
               <div><p class="text-description">{{(card.type_of_program.length > 0) ? card.type_of_program[0].name : 'Curso online' }}</p></div>
-              <div class="info">
-                <div class="info"><mat-icon>account_balance</mat-icon> {{card.institution}}</div>
+              <div class="info-content">
+                <div class="info"><mat-icon>account_balance</mat-icon><p class="info-content-text">{{card.institution}}</p></div>
                 <div class="info"><mat-icon>event_available</mat-icon> Inscripción: {{card.registration_date | date: 'dd MMM'}}</div>
                 <div class="info"><mat-icon>event</mat-icon> Modalidad: {{(card.modality.length > 0) ? card.modality[0].name : 'No definido' }}</div>
-                <div class="info"><mat-icon>schedule</mat-icon> Horario del turno: {{card.turno ? card.turno : 'no definido'}}</div>
-                <div class="info"><mat-icon>av_timer</mat-icon> Duración: {{diffInMonthsOrDays(card.start_of_course,card.end_of_course)}} | {{card.shift ? card.shift : 'no definido'}}</div>
+                <div class="info"><mat-icon>schedule</mat-icon> Horario del turno: <p class="info-content-text-two"> {{ card.shifts_summary ? card.shifts_summary : 'no definido'}}</p></div>
+                <div class="info"><mat-icon>av_timer</mat-icon> Duración: {{card.numer_of_months}} meses | {{card.shift ? card.shift : 'no definido'}}</div>
               </div>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>
       </mat-grid-list>
-    
- 
+      
 </div>
+<mat-paginator class="paginator" *ngIf="paginator" [length]="element.count"
+              [pageSize]="8"
+              [hidePageSize]="true"
+              (page)="cambiarPagina($event)">
+      </mat-paginator>

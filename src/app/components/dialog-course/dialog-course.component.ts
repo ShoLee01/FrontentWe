@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ApiService } from 'src/app/service/api.service';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import * as moment from 'moment';
 
 export const MY_FORMATS = {
   parse: {
@@ -41,6 +42,7 @@ export class DialogCourseComponent implements OnInit {
   shifts: { start_time: string; end_time: string, weekday: string }[] = [];
   countries = ["Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba", "Ecuador", "El Salvador", "Guatemala", "Honduras", "México", "Nicaragua", "Panamá", "Paraguay", "Perú", "Puerto Rico", "República Dominicana", "Uruguay", "Venezuela"]
   day = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]; // Agrega un array para guardar los dias
+  weekday_cro : any;// Agrega un array para guardar los dias
   backgroundFile: File | null = null;
   backgroundName: string = '';
   values = 0;
@@ -57,6 +59,16 @@ export class DialogCourseComponent implements OnInit {
    }
 
    ngOnInit(): void {
+
+    this.weekday_cro ={
+      Lunes: 'Lun',
+      Martes: 'Mar',
+      Miercoles: 'Mie',
+      Jueves: 'Jue',
+      Viernes: 'Vie',
+      Sabado: 'Sab',
+      Domingo: 'Dom'
+    }
 
     /* Programs Types */
     this.api.getPrograms().subscribe({
@@ -101,6 +113,8 @@ export class DialogCourseComponent implements OnInit {
       start_of_course : ['', Validators.required],
       // Fecha de fin del curso (mat-datepicker-toggle)
       end_of_course : ['', Validators.required],
+      // Número de meses que durará el curso (input type="number")
+      numer_of_months : [0],
       // Descuento que tendrá el curso (mat-slider) que va de 0 a 100
       discount : [0],
       // Precio del curso (input type="number")
@@ -125,6 +139,15 @@ export class DialogCourseComponent implements OnInit {
       type_of_program : [0, Validators.required],
     })
 
+    
+    this.courseForm.get('start_of_course')?.valueChanges.subscribe(() => {
+      this.calculateMonths();
+    });
+
+    this.courseForm.get('end_of_course')?.valueChanges.subscribe(() => {
+      this.calculateMonths();
+    });
+
     if(this.editData){
       this.actionBtn = "Actualizar";
       console.log(this.editData);
@@ -134,7 +157,8 @@ export class DialogCourseComponent implements OnInit {
       this.courseForm.patchValue(this.editData); // patch the form with the data
       this.type_of_program_selected = this.editData.type_of_program[0].id;
       this.modality_selected = this.editData.modality[0].id;
-      
+      this.calculateMonths();
+
       for(let i of this.editData.category){
         this.categoriesSelected.push(i);
       }
@@ -155,6 +179,25 @@ export class DialogCourseComponent implements OnInit {
       return this.categories?.filter((i: any) => !this.categoriesSelected.some((j: any) => i.id === j.id));
     } else {
       return this.categories;
+    }
+  }
+
+  calculateMonths() {
+    let start = this.courseForm.get('start_of_course')?.value;
+    let end = this.courseForm.get('end_of_course')?.value;
+
+    if (start && end && this.courseForm.value.start_of_course != '' && this.courseForm.value.end_of_course != '') {
+      const startDate = moment(start);
+      const endDate = moment(end);
+      const duration = moment.duration(endDate.diff(startDate));
+      const months = duration.asMonths();
+      start = startDate.toISOString().split('T')[0];
+      end = endDate.toISOString().split('T')[0];
+      if(this.courseForm.value.numer_of_months == 0){
+        this.courseForm.get('numer_of_months')?.setValue(Math.round(months));
+      }else if(this.courseForm.value.start_of_course != this.editData.start_of_course || this.courseForm.value.end_of_course != this.editData.end_of_course){
+        this.courseForm.get('numer_of_months')?.setValue(Math.round(months));
+      }
     }
   }
   
@@ -282,6 +325,7 @@ export class DialogCourseComponent implements OnInit {
             /* Edita la informacion */
             if(this.editData.type_of_program[0].id != this.courseForm.value.type_of_program){
 
+                
                 this.api.deleteProgramTypeAndCourse(this.editData.type_of_program[0].id, this.editData.id).subscribe({
                   next: (data: any) => {
                     console.log(data);
@@ -386,21 +430,53 @@ export class DialogCourseComponent implements OnInit {
             }
 
             /* Actualizar Curso */
+            this.courseForm.value.background_image = null;
+            console.log(this.courseForm.value);
             this.api.updateCourse(this.editData.id, this.courseForm.value).subscribe({
               next: (course: any) => {
+                if(this.backgroundFile){
+                  const logo = new FormData();
+                  logo.append('background_image', this.backgroundFile as Blob);
+                  this.api.updateCoursePatch(this.editData.id, logo).subscribe({
+                    next: (data: any) => {
+                      console.log(data);
+                      this.dialogRef.close('update');
+                    },
+                    error: (error: any) => {
+                      this.showSnackBar('Error al subir la imagen de fondo');
+                      console.log(error);
+                    }
+                  });
+                }else{
                 console.log(course);
                 this.dialogRef.close('update');
+                }
               },
               error: (error: any) => {
+                this.showSnackBar('Error al actualizar el curso');
                 console.log(error);
               }
             });
 
           } else {
+            this.courseForm.value.background_image = null; 
             this.api.createCourse(this.courseForm.value).subscribe({
               next: (course: any) => {
                 console.log(course);
                 /* Crando conecciones para el curso */
+                if(this.backgroundFile){
+                  const logo = new FormData();
+                  logo.append('background_image', this.backgroundFile as Blob);
+                  this.api.updateCoursePatch(course.id, logo).subscribe({
+                    next: (data: any) => {
+                      console.log(data);
+                    },
+                    error: (error: any) => {
+                      this.showSnackBar('Error al subir la imagen de fondo');
+                      console.log(error);
+                    }
+                  });
+                }
                 for(let category of this.categoriesSelected){
                   this.api.createCategoryAndCourse(category.id, course.id).subscribe({
                     next: (data: any) => {
@@ -430,7 +506,9 @@ export class DialogCourseComponent implements OnInit {
                 });
                 /* Fin */
                 /* Horarios */
+                console.log(this.shifts);
                 for(let shift of this.shifts){
+                  console.log(shift);
                   this.api.createSchedule(course.id, shift).subscribe({
                     next: (data: any) => {
                       console.log(data);

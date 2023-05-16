@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
-import { Subject, forkJoin } from 'rxjs';
-import { map, retry, switchMap } from 'rxjs/operators';
+import { Subject, concat, forkJoin, from } from 'rxjs';
+import { catchError, concatMap, map, retry, switchMap, toArray } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -9,7 +9,9 @@ import { DialogCourseComponent } from '../dialog-course/dialog-course.component'
 import { ApiService } from 'src/app/service/api.service';
 import { Observable, of } from 'rxjs';
 import { DialogComponent } from '../share/dialog/dialog.component';
+import { tap } from 'rxjs/operators';
 import { InterconnectionService } from 'src/app/service/interconnection.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +21,11 @@ import { InterconnectionService } from 'src/app/service/interconnection.service'
 export class DashboardComponent implements OnInit {
   numColumns = 6;
   loading = true;
+  paginator = false;
+  element: any;
   cards: any;
+  indexPage = 1;
+
  /*  cards : any; */
   private destroy$ = new Subject<void>();
   constructor(
@@ -34,23 +40,7 @@ export class DashboardComponent implements OnInit {
 
 
     ngOnInit(): void {
-      this.api.getProfile().pipe(
-        retry(3) // intenta la petición hasta 3 veces antes de emitir un error
-      ).subscribe({
-        next: (result: any) => {
-          if(result.number_of_courses == 0){
-            this.showSnackBar('No hay cursos registrados');
-            this.changeDetector.markForCheck();
-            this.loading = false;
-          }else{
-            this.getCourses();
-          }
-          console.log(result);
-        },
-        error: (error: any) => {
-          console.log(error);
-        }
-      });
+      this.getCourses(1);
 
       this.breakpointObserver
     .observe([
@@ -79,8 +69,7 @@ export class DashboardComponent implements OnInit {
       this.numColumns = numColumns;
       this.changeDetector.markForCheck();
     });
-
-    this.change.changeHandler$.emit(true);
+   
     }
 
     ngOnDestroy(): void {
@@ -100,7 +89,10 @@ export class DashboardComponent implements OnInit {
       }).afterClosed().subscribe(result => {
         if(result === 'true'){
           this.showSnackBar('Curso agregado');
+          this.loading = true;
+          this.paginator = false;
           this.getCourses();
+          this.changeDetector.detectChanges();
         } 
       });
     }
@@ -114,8 +106,10 @@ export class DashboardComponent implements OnInit {
             data: card
           }).afterClosed().subscribe(result => {
             if(result === 'update'){
+              this.loading = true;
               this.showSnackBar('Curso editado');
               this.getCourses();
+              this.changeDetector.detectChanges();
             }
           });
         },
@@ -132,154 +126,75 @@ export class DashboardComponent implements OnInit {
       }).afterClosed().subscribe(result => {
         if(result === 'Yes'){
              /* Categories */
-          for(let categories of card.category){
-            this.api.deleteCategoryAndCourse(categories.id,card.id).subscribe({
-              next: (result: any) => {
-                console.log(result);
-              },
-              error: (error: any) => {
-                console.log(error);
-              }
-            });
+         // Convertir arrays a Observables
+        this.loading = true;
+        this.paginator = false;
+        this.changeDetector.detectChanges();
+
+        this.api.deleteCourse(card.id).subscribe({
+          next: (result: any) => {
+            this.showSnackBar('Curso eliminado');
+            this.loading = true;
+            this.paginator = false;
+            this.getCourses();
+            this.changeDetector.detectChanges();
+          },
+          error: (error: any) => {
+            this.showSnackBar('Error al eliminar el curso');
           }
-          /* types of programs */
-          for(let types of card.type_of_program){
-            this.api.deleteProgramTypeAndCourse(types.id,card.id).subscribe({
-              next: (result: any) => {
-                console.log(result);
-              },
-              error: (error: any) => {
-                console.log(error);
-              }
-            });
-          }
-          /* Modalities */
-          for(let modalities of card.modality){
-            this.api.deleteModalityAndCourse(modalities.id,card.id).subscribe({
-              next: (result: any) => {
-                console.log(result);
-              },
-              error: (error: any) => {
-                console.log(error);
-              }
-            });
-          }
-          /* Shifts */
-          this.api.getShiftsByCourse(card.id).subscribe({
-            next: (result: any) => {
-              for(let shifts of result){
-                this.api.deleteShift(shifts.id).subscribe({
-                  next: (result: any) => {
-                    console.log(result);
-                  },
-                  error: (error: any) => {
-                    console.log(error);
-                  }
-                });
-              }
-            },
-            error: (error: any) => {
-              console.log(error);
-            }
-          });
-          /* Course */
-          setTimeout(() => { 
-            this.api.deleteCourse(card.id).subscribe({
-              next: (result: any) => {
-                this.showSnackBar('Curso eliminado');
-                this.getCourses();
-              },
-              error: (error: any) => {
-                this.showSnackBar('Error al eliminar el curso');
-              }
-            });
-          }, 1000);
-        
+        });
         }
       });
     }
 
-    diffInMonthsOrDays(start_date:any, end_date:any) {
-      const start = new Date(start_date);
-      const end = new Date(end_date);
-    
-      const diffTime = end.getTime() - start.getTime();
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      // Calcular diferencia en meses
-      const diffMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-    
-      // Retornar resultado
-      if (diffDays < 30) {
-        return `${diffDays} días`;
-      } else if (diffMonths === 1) {
-        return `1 mes`;
-      } else {
-        return `${diffMonths} meses`;
+    getCourses(page: number = 1) {
+      (this.indexPage > 1) ? this.indexPage : this.indexPage = page;
+      this.loading = true;
+      this.api.getCoursesByUniversity(this.indexPage).subscribe({
+        next: (result: any) => {
+          console.log(result);
+          this.element = result;
+          this.cards = result.results;
+          this.cards = this.cards.map((card: any) => {
+            if (card.shifts && card.shifts.length > 0) {
+              card.shift = card.shifts[0].start_time.slice(0, -3) + ' - ' + card.shifts[0].end_time.slice(0, -3);
+            }
+            return card;
+          });
+          
+          console.log(this.loading);
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.showSnackBar('Error al obtener los cursos');
+        },
+        complete: () => {
+          if(this.cards.length == 0){
+            this.paginator = false;
+            this.showSnackBar('No hay cursos registrados');
+          }else{
+            this.loading = false;
+            this.paginator = true;
+            this.changeDetector.detectChanges();
+          }
+        }
+      });
+      
+    }
+
+    cambiarPagina(event: PageEvent) {
+      const pageIndex = event.pageIndex;
+      const pageSize = event.pageSize;
+      const previousPageIndex = event.previousPageIndex;
+      if (previousPageIndex !== undefined && pageIndex > previousPageIndex) {
+        this.indexPage = pageIndex + 1;
+        console.log('Avanzar a la página ' + pageIndex);
+        this.getCourses(pageIndex + 1);
+      } else if (previousPageIndex !== undefined && pageIndex < previousPageIndex) {
+        this.indexPage = pageIndex + 1;
+        this.getCourses(pageIndex + 1);
       }
     }
-
-    getCourses(){
-
-        this.api.getCoursesByUniversity().subscribe({
-          next: (result: any) => {
-            console.log(result);
-            /* this.cards = of(result); */
-            this.cards = result;
-            console.log(this.loading);
-          },
-          error: (error: any) => {
-            console.log(error);
-            this.showSnackBar('Error al obtener los cursos');
-          },
-          complete: () => {
-            // Actualizar el estado de loading aquí
-            if(this.cards.length == 0){
-              this.showSnackBar('No hay cursos registrados');
-            }
-  
-            for (let [index, card] of this.cards.entries()) {
-              this.api.getShiftsByCourse(card.id).subscribe({
-                next: (result: any) => {
-                  if(result.length > 0){
-                    this.cards[index].shift = result[0].start_time.slice(0, -3) + ' - ' + result[0].end_time.slice(0, -3);
-                  }
-                  console.log(result);
-                },
-                error: (error: any) => {
-                  console.log(error);
-                },
-                complete: () => {
-                  this.loading = false;
-                  this.changeDetector.detectChanges();
-                  console.log(this.loading);
-                }
-              });
-            }
-  
-            /*  */
-            for (let [index, card] of this.cards.entries()) {
-              this.api.getShiftsBySchedule(card.id).subscribe({
-                next: (result: any) => {
-                    this.cards[index].turno = result.shifts;
-                    console.log(result);
-                },
-                error: (error: any) => {
-                  console.log(error);
-                },
-                complete: () => {
-                  this.loading = false;
-                  this.changeDetector.detectChanges();
-                  console.log(this.loading);
-                }
-              });
-            }
-          }
-        });
-    }
-
-    
-    
-    
     
     
 

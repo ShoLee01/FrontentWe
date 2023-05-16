@@ -27,6 +27,7 @@ export class ApiService {
       const currentDate = new Date();
       const isTokenActive = expirationDate > currentDate;
       if(isTokenActive){
+        this.change.changeHandler$.emit(true);
         this.router.navigate(['/principal']);
         console.log('token activo');
         this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.user.access}`);
@@ -116,8 +117,8 @@ export class ApiService {
     return this.http.post(this.basePath + 'shift/create/course/'+CourseId+'/', data, { headers: this.headers });
   }
 
-  getCoursesByUniversity() {
-    return this.http.get(this.basePath + 'course/university/'+this.user.university.id+'/', { headers: this.headers });
+  getCoursesByUniversity(page: any = 1) {
+    return this.http.get(this.basePath + 'course/university/'+this.user.university.id+'/' + '?page=' + page, { headers: this.headers });
   }
 
   getShiftsByCourse(CourseId: any) {
@@ -150,5 +151,9 @@ export class ApiService {
 
   updateCourse(CourseId: any, data: any) {
     return this.http.put(this.basePath + 'course/update/'+CourseId+'/', data, { headers: this.headers });
+  }
+
+  updateCoursePatch(CourseId: any, data: any) {
+    return this.http.patch(this.basePath + 'course/update/'+CourseId+'/', data, { headers: this.headers });
   }
 }

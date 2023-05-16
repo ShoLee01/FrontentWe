@@ -84,8 +84,9 @@ export class LoginAdminComponent implements OnInit {
       );
         
     } else {
-      alert('Completa los campos');
-      this.loginForm.markAllAsTouched();
+      this.showSnackBar('Campos incompletos');
+      this.loading = false;
+      this.changeDetector.markForCheck();
     }
   }
 

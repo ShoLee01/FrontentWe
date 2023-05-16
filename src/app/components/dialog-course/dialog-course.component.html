@@ -57,6 +57,11 @@
             <mat-datepicker #endPicker></mat-datepicker>
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+            <mat-label>Meses de duración del curso</mat-label>
+            <input formControlName="numer_of_months" matInput type="number" placeholder="Meses de duración del curso">
+        </mat-form-field>
+
         <div class="d-flex flex-column justify-content-start" style="width: 100%;">
             <label>Descuento del curso:</label>
             <mat-slider
@@ -137,7 +142,7 @@
             </div>
 
             <div class="shift-tags">
-                <span *ngFor="let shift of shifts; let i = index" class="shift-tag">{{ shift.start_time.slice(0, -3) }} - {{ shift.end_time.slice(0, -3) }} <button style="text-decoration: none;" (click)="deleteShift(i)">X</button></span>
+                <span *ngFor="let shift of shifts; let i = index" class="shift-tag">{{this.weekday_cro[shift.weekday] }} - {{shift.start_time.slice(0, -3) }} - {{ shift.end_time.slice(0, -3) }} <button style="text-decoration: none;" (click)="deleteShift(i)">X</button></span>
             </div>
         </div>
         <mat-divider></mat-divider>

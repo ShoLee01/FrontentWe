@@ -39,7 +39,7 @@
   margin: 0;
 }
 
-.date, .discount {
+.date, .discount, .link {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,6 +47,13 @@
   padding: 5px;
   border-radius: 4px;
   position: absolute; /* Agregamos posición absoluta */
+}
+
+.link{
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.073); /* Cambiamos a un fondo translúcido */
+  bottom: 100px; /* Ajustamos la posición en la parte inferior izquierda */
+  left: 10px;
 }
 
 .date {
@@ -65,22 +72,67 @@
 
 .dashboard-card-content {
   display: flex;
+  white-space: nowrap;
+  width: 300px;
   flex-direction: column;
   gap: 5px;
   padding: 15px;
 }
 
+.text-title{
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 270px;
+}
+
 .dashboard-card-content h3 {
   margin: 0;
-  text-align: center;
 }
 
 .dashboard-card-content > div {
   text-align: center;
 }
 
+.info-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.paginator{
+  width: 100%;
+  font-size : 16px;
+  background-color: #494b5d;
+}
+
 .info {
   text-align: start;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-content-text {
+  margin: 0;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+.info-content-text-two{
+  margin: 0;
+  display: inline-block;
+  margin-left: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
 }
 
 .text-title {

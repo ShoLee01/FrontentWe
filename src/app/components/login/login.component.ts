@@ -69,9 +69,9 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('addUsuario', JSON.stringify(data));
             this.change.changeHandler$.emit(true);
             this.loginForm.reset();
-            this.router.navigate(['principal']);
             this.showSnackBar('Inicio de sesión exitoso');
             this.loading = false;
+            this.router.navigate(['principal']);
             this.changeDetector.markForCheck();
           },
           error: (error) => {
@@ -84,8 +84,9 @@ export class LoginComponent implements OnInit {
       );
         
     } else {
-      alert('Completa los campos');
-      this.loginForm.markAllAsTouched();
+      this.showSnackBar('Campos incompletos');
+      this.loading = false;
+      this.changeDetector.markForCheck();
     }
   }
 
